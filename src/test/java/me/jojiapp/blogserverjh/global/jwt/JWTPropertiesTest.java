@@ -1,6 +1,7 @@
 package me.jojiapp.blogserverjh.global.jwt;
 
 
+import io.jsonwebtoken.security.*;
 import lombok.*;
 import org.junit.jupiter.api.*;
 
@@ -12,12 +13,20 @@ import static org.assertj.core.api.Assertions.*;
 
 public class JWTPropertiesTest {
 
-	private final JWTProperties jwtProperties = new JWTProperties("secret", 1L, 2L);
+	public static final String SECRET_KEY = "ASDAOSDMASMDOASOMDOOMQDWOMQWDMOODQWMOQWD";
+	private final JWTProperties jwtProperties = new JWTProperties(SECRET_KEY, 1L, 2L);
 
 	@Test
-	@DisplayName("Secret Key 값을 Bytes로 변환하여 반환한다")
-	void toBytesSecretKey() throws Exception {
-		assertThat(jwtProperties.toBytesSecretKey()).isEqualTo("secret".getBytes(UTF_8));
+	@DisplayName("서명에 사용될 Key를 조회한다")
+	void getKey() throws Exception {
+		// Given
+		val secretKey = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(UTF_8));
+
+		// When
+		val actual = jwtProperties.getKey();
+		// Then
+
+		assertThat(actual).isEqualTo(secretKey);
 	}
 
 	@Test
@@ -27,7 +36,7 @@ public class JWTPropertiesTest {
 		val now = new Date();
 
 		// When
-		Date actual = jwtProperties.getAccessTokenExpiredDate(now);
+		val actual = jwtProperties.getAccessTokenExpiredDate(now);
 
 		// Then
 		assertThat(actual).isEqualTo(getActualExpiredDate(now, 1L));
@@ -40,7 +49,7 @@ public class JWTPropertiesTest {
 		val now = new Date();
 
 		// When
-		Date actual = jwtProperties.getRefreshTokenExpiredDate(now);
+		val actual = jwtProperties.getRefreshTokenExpiredDate(now);
 
 		// Then
 		assertThat(actual).isEqualTo(getActualExpiredDate(now, 2L));
