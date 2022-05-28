@@ -36,7 +36,7 @@ public class JWTProvider {
 	 *
 	 * @see JWTDTO
 	 */
-	public JWTDTO generate(Long issuerId, String roles) {
+	public JWTDTO generate(final Long issuerId, final String roles) {
 		val now = new Date();
 		val accessToken = Jwts.builder()
 				.setIssuer(issuerId.toString())
@@ -61,7 +61,7 @@ public class JWTProvider {
 	 *
 	 * @return 발급자 고유 아이디
 	 */
-	public Long getIssuer(String token) {
+	public Long getIssuer(final String token) {
 		return Long.valueOf(getClaims(token).getIssuer());
 	}
 
@@ -74,7 +74,7 @@ public class JWTProvider {
 	 *
 	 * @throws JwtException 토큰을 사용하기에 문제가 있을 경우 발생하는 예외
 	 */
-	private Claims getClaims(String token) {
+	private Claims getClaims(final String token) {
 		try {
 			return Jwts.parserBuilder()
 					.setSigningKey(jwtProperties.getKey())
@@ -95,7 +95,7 @@ public class JWTProvider {
 	 *
 	 * @return 권한
 	 */
-	public String getRoles(String token) {
+	public String getRoles(final String token) {
 		return (String) getClaims(token).get(AUTHORITIES_KEY);
 	}
 
@@ -107,7 +107,7 @@ public class JWTProvider {
 	 *
 	 * @return Access Token과 Refresh Token의 Issuer 동일 여부
 	 */
-	public boolean match(String accessToken, String refreshToken) {
+	public boolean match(final String accessToken, final String refreshToken) {
 		validationAccessToken(accessToken);
 		validationRefreshToken(refreshToken);
 		try {
@@ -125,7 +125,7 @@ public class JWTProvider {
 	 *
 	 * @return Access Token 여부
 	 */
-	private boolean isAccessToken(String token) {
+	private boolean isAccessToken(final String token) {
 		try {
 			return getRoles(token) != null;
 		} catch (ExpiredJwtException e) {
@@ -140,7 +140,7 @@ public class JWTProvider {
 	 *
 	 * @throws JwtException
 	 */
-	private void validationAccessToken(String accessToken) {
+	private void validationAccessToken(final String accessToken) {
 		if (!isAccessToken(accessToken)) throw new JwtException(NOT_ACCESS_TOKEN.getMessage());
 	}
 
@@ -151,7 +151,7 @@ public class JWTProvider {
 	 *
 	 * @throws JwtException
 	 */
-	private void validationRefreshToken(String refreshToken) {
+	private void validationRefreshToken(final String refreshToken) {
 		if (isAccessToken(refreshToken)) throw new JwtException(NOT_REFRESH_TOKEN.getMessage());
 	}
 }
