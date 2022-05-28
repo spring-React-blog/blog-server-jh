@@ -34,7 +34,7 @@ public record APIResponse<T>(
 	 *
 	 * @see APIResponse
 	 */
-	public static <T> APIResponse<T> success(T body) {
+	public static <T> APIResponse<T> success(final T body) {
 		return new APIResponse<>(body, "");
 	}
 
@@ -47,7 +47,7 @@ public record APIResponse<T>(
 	 *
 	 * @see APIResponse
 	 */
-	public static APIResponse<Void> error(String message) {
+	public static APIResponse<Void> error(final String message) {
 		return new APIResponse<>(null, message);
 	}
 }

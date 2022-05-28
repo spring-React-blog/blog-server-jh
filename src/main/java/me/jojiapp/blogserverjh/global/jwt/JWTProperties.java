@@ -42,7 +42,7 @@ public class JWTProperties {
 	 * @param accessTokenExpiredMinutes  Access Token 만료 시간 (분)
 	 * @param refreshTokenExpiredMinutes Refresh Token 만료 시간 (분)
 	 */
-	public JWTProperties(String secretKey, Long accessTokenExpiredMinutes, Long refreshTokenExpiredMinutes) {
+	public JWTProperties(final String secretKey, final Long accessTokenExpiredMinutes, final Long refreshTokenExpiredMinutes) {
 		this.accessTokenExpiredMinutes = accessTokenExpiredMinutes;
 		this.refreshTokenExpiredMinutes = refreshTokenExpiredMinutes;
 		this.key = Keys.hmacShaKeyFor(secretKey.getBytes(UTF_8));
@@ -64,7 +64,7 @@ public class JWTProperties {
 	 *
 	 * @return 발급 시점 + Access Token 만료 시간
 	 */
-	public Date getAccessTokenExpiredDate(Date now) {
+	public Date getAccessTokenExpiredDate(final Date now) {
 		return getExpiredDate(now, accessTokenExpiredMinutes);
 	}
 
@@ -75,7 +75,7 @@ public class JWTProperties {
 	 *
 	 * @return 발급 시점 + Refresh Token 만료 시간
 	 */
-	public Date getRefreshTokenExpiredDate(Date now) {
+	public Date getRefreshTokenExpiredDate(final Date now) {
 		return getExpiredDate(now, refreshTokenExpiredMinutes);
 	}
 
@@ -87,7 +87,7 @@ public class JWTProperties {
 	 *
 	 * @return 발급 시점 + 토큰 만료 시간
 	 */
-	private Date getExpiredDate(Date now, Long expiredMinutes) {
+	private Date getExpiredDate(final Date now, final Long expiredMinutes) {
 		return new Date(now.getTime() + Duration.ofMinutes(expiredMinutes).toMillis());
 	}
 
