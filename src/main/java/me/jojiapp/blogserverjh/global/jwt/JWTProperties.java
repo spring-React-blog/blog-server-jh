@@ -1,8 +1,9 @@
 package me.jojiapp.blogserverjh.global.jwt;
 
-import lombok.*;
+import io.jsonwebtoken.security.*;
 import org.springframework.boot.context.properties.*;
 
+import java.security.*;
 import java.time.*;
 import java.util.*;
 
@@ -10,16 +11,20 @@ import static java.nio.charset.StandardCharsets.*;
 
 @ConfigurationProperties(prefix = "jwt")
 @ConstructorBinding
-@RequiredArgsConstructor
-@ToString
 public class JWTProperties {
 
-	private final String secretKey;
 	private final Long accessTokenExpiredMinutes;
 	private final Long refreshTokenExpiredMinutes;
+	private final Key key;
 
-	public byte[] toBytesSecretKey() {
-		return secretKey.getBytes(UTF_8);
+	public JWTProperties(String secretKey, Long accessTokenExpiredMinutes, Long refreshTokenExpiredMinutes) {
+		this.accessTokenExpiredMinutes = accessTokenExpiredMinutes;
+		this.refreshTokenExpiredMinutes = refreshTokenExpiredMinutes;
+		this.key = Keys.hmacShaKeyFor(secretKey.getBytes(UTF_8));
+	}
+
+	public Key getKey() {
+		return key;
 	}
 
 	public Date getAccessTokenExpiredDate(Date now) {
