@@ -20,6 +20,11 @@ public class JWTProvider {
 	private static final String AUTHORITIES_KEY = "roles";
 
 	/**
+	 * 권한 구분자
+	 */
+	private static final String delimiter = ", ";
+
+	/**
 	 * JWT 설정
 	 *
 	 * @see JWTProperties JWT 설정 클래스
@@ -30,17 +35,17 @@ public class JWTProvider {
 	 * 토큰 생성
 	 *
 	 * @param issuerId 발급자 고유 아이디
-	 * @param roles    권한
+	 * @param roles    권한 리스트
 	 *
 	 * @return Access Token, Refresh Token
 	 *
 	 * @see JWTDTO
 	 */
-	public JWTDTO generate(final Long issuerId, final String roles) {
+	public JWTDTO generate(final Long issuerId, final List<String> roles) {
 		val now = new Date();
 		val accessToken = Jwts.builder()
 				.setIssuer(issuerId.toString())
-				.claim(AUTHORITIES_KEY, roles)
+				.claim(AUTHORITIES_KEY, String.join(delimiter, roles))
 				.setExpiration(jwtProperties.getAccessTokenExpiredDate(now))
 				.signWith(jwtProperties.getKey())
 				.compact();
@@ -93,10 +98,12 @@ public class JWTProvider {
 	 *
 	 * @param token JWT로 인코딩 된 토큰
 	 *
-	 * @return 권한
+	 * @return 권한 리스트
 	 */
-	public String getRoles(final String token) {
-		return (String) getClaims(token).get(AUTHORITIES_KEY);
+	public List<String> getRoles(final String token) {
+		String rolesJoin = (String) getClaims(token).get(AUTHORITIES_KEY);
+		if (rolesJoin == null) return List.of();
+		return Arrays.stream(rolesJoin.split(delimiter)).toList();
 	}
 
 	/**
@@ -125,9 +132,9 @@ public class JWTProvider {
 	 *
 	 * @return Access Token 여부
 	 */
-	private boolean isAccessToken(final String token) {
+	public boolean isAccessToken(final String token) {
 		try {
-			return getRoles(token) != null;
+			return !getRoles(token).equals(List.of());
 		} catch (ExpiredJwtException e) {
 			return e.getClaims().get(AUTHORITIES_KEY) != null;
 		}
