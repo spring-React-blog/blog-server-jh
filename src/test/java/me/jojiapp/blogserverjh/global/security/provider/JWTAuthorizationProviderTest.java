@@ -88,4 +88,18 @@ public class JWTAuthorizationProviderTest {
 				.hasMessage(JWTError.NOT_ACCESS_TOKEN.getMessage());
 	}
 
+	@Test
+	@DisplayName("Access Token이 만료된 경우 JWTAuthenticationException이 발생한다")
+	void expiredAccessToken() throws Exception {
+		// Given
+		setJwtProvider(-1L, 2L);
+		val jwtDto = jwtProvider.generate(1L, authoritiesString);
+		val authentication = JWTAccessTokenAuthentication.of(jwtDto.accessToken());
+
+		// When & Then
+		assertThatThrownBy(() -> jwtAuthorizationProvider.authenticate(authentication))
+				.isInstanceOf(JWTAuthenticationException.class)
+				.hasMessage(JWTError.EXPIRED.getMessage());
+	}
+
 }
