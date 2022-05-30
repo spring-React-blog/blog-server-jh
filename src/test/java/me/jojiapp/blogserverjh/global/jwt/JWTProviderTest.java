@@ -6,6 +6,8 @@ import me.jojiapp.blogserverjh.domain.member.vo.*;
 import me.jojiapp.blogserverjh.global.jwt.dto.*;
 import org.junit.jupiter.api.*;
 
+import java.util.*;
+
 import static me.jojiapp.blogserverjh.global.jwt.JWTPropertiesTest.*;
 import static me.jojiapp.blogserverjh.global.jwt.error.JWTError.*;
 import static org.assertj.core.api.AssertionsForClassTypes.*;
@@ -35,7 +37,7 @@ public class JWTProviderTest {
 	}
 
 	private JWTDTO jwtGenerate(Long id) {
-		return jwtProvider.generate(id, Role.USER.name());
+		return jwtProvider.generate(id, List.of(Role.USER.name()));
 	}
 
 	@Test
@@ -72,7 +74,7 @@ public class JWTProviderTest {
 		val actual = jwtProvider.getRoles(jwtDto.accessToken());
 
 		// Then
-		assertThat(actual).isEqualTo(Role.USER.name());
+		assertThat(actual).isEqualTo(List.of(Role.USER.name()));
 	}
 
 	@Test
@@ -172,6 +174,17 @@ public class JWTProviderTest {
 		val actual = jwtProvider.getRoles(jwtDto.refreshToken());
 
 		// Then
-		assertThat(actual).isNull();
+		assertThat(actual).isEqualTo(List.of());
+	}
+
+	@Test
+	@DisplayName("Access Token 인지 판단 여부")
+	void isAccessToken() throws Exception {
+		// Given
+		val jwtDto = jwtGenerate();
+
+		// When & then
+		assertThat(jwtProvider.isAccessToken(jwtDto.accessToken())).isTrue();
+		assertThat(jwtProvider.isAccessToken(jwtDto.refreshToken())).isFalse();
 	}
 }
