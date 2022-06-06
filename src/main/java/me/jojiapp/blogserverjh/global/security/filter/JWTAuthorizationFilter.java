@@ -1,7 +1,14 @@
 package me.jojiapp.blogserverjh.global.security.filter;
 
+import com.fasterxml.jackson.databind.*;
 import lombok.*;
+import lombok.extern.slf4j.*;
+import me.jojiapp.blogserverjh.global.response.*;
+import me.jojiapp.blogserverjh.global.security.authentication.*;
+import org.springframework.http.*;
 import org.springframework.security.authentication.*;
+import org.springframework.security.core.*;
+import org.springframework.security.core.context.*;
 import org.springframework.web.filter.*;
 
 import javax.servlet.*;
@@ -14,6 +21,7 @@ import static org.springframework.http.HttpHeaders.*;
 /**
  * JWT 인가 처리 필터
  */
+@Slf4j
 @RequiredArgsConstructor
 public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
@@ -23,10 +31,16 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 	 * Authorization Header의 첫 시작은 Bearer 이여야 합니다.
 	 */
 	public static final String BEARER = "Bearer ";
+	public static final String UTF_8 = "UTF-8";
 	/**
 	 * 인증 처리 위임 매니저
 	 */
 	private final AuthenticationManager authenticationManager;
+
+	/**
+	 * JSON 변환 Mapper
+	 */
+	private final ObjectMapper objectMapper;
 
 	/**
 	 * 인가 처리 필터
@@ -47,8 +61,17 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 		}
 
 		val accessToken = authorization.substring(BEARER.length());
-
-//		authenticationManager.authenticate()
+		try {
+			Authentication authenticate = authenticationManager
+					.authenticate(JWTAccessTokenAuthentication.of(accessToken));
+			SecurityContextHolder.getContext().setAuthentication(authenticate);
+		} catch (AuthenticationException e) {
+			log.error("message", e);
+			response.setStatus(HttpStatus.GONE.value());
+			response.setCharacterEncoding(UTF_8);
+			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+			objectMapper.writeValue(response.getWriter(), APIResponse.error(e.getMessage()));
+		}
 
 	}
 
@@ -61,6 +84,5 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 		return Optional.ofNullable(authorization)
 				.map(a -> !a.startsWith(BEARER))
 				.orElse(true);
-
 	}
 }

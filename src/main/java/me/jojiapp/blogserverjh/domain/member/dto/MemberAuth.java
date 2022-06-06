@@ -9,6 +9,9 @@ import me.jojiapp.blogserverjh.domain.member.vo.*;
  * @param email    이메일
  * @param password 비밀번호
  * @param role     권한
+ *
+ * @see Email
+ * @see Password
  */
 public record MemberAuth(
 		Long id,

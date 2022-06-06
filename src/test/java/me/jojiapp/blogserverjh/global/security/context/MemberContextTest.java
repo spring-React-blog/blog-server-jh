@@ -22,8 +22,8 @@ class MemberContextTest {
 		val password = "encoding password";
 		val memberAuth = new MemberAuth(
 				id,
-				new Email(email),
-				new Password(password),
+				Email.of(email),
+				Password.of(password),
 				Role.USER
 		);
 		// When
