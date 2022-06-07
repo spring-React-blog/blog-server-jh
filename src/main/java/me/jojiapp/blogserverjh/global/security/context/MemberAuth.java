@@ -8,11 +8,11 @@ import me.jojiapp.blogserverjh.domain.member.vo.*;
  * @param id       회원 고유 아이디
  * @param email    이메일
  * @param password 비밀번호
- * @param role     권한
+ * @param roleType 권한
  */
 public record MemberAuth(
 		Long id,
 		Email email,
 		Password password,
-		Role role
+		RoleType roleType
 ) {}

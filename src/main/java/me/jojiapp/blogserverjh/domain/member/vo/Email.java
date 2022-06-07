@@ -2,9 +2,12 @@ package me.jojiapp.blogserverjh.domain.member.vo;
 
 import lombok.*;
 
+import javax.persistence.*;
+
 /**
  * 이메일 VO
  */
+@Embeddable
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -14,6 +17,7 @@ public class Email {
 	/**
 	 * 이메일
 	 */
+	@Column(nullable = false, unique = true)
 	private String email;
 
 	/**

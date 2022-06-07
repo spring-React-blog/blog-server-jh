@@ -2,9 +2,12 @@ package me.jojiapp.blogserverjh.domain.member.vo;
 
 import lombok.*;
 
+import javax.persistence.*;
+
 /**
  * 비밀번호 VO
  */
+@Embeddable
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -14,6 +17,7 @@ public class Password {
 	/**
 	 * 비밀번호
 	 */
+	@Column(nullable = false, length = 500)
 	private String password;
 
 	/**

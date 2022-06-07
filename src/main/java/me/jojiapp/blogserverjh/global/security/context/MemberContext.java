@@ -34,7 +34,7 @@ public final class MemberContext extends User {
 	private MemberContext(final MemberAuth memberAuth) {
 		super(memberAuth.email().getEmail(),
 				memberAuth.password().getPassword(),
-				parseAuthorities(memberAuth.role()));
+				parseAuthorities(memberAuth.roleType()));
 		this.id = memberAuth.id();
 	}
 
@@ -52,27 +52,27 @@ public final class MemberContext extends User {
 	/**
 	 * 단건 권한을 받아 시큐리티에서 사용되는 권한으로 변환
 	 *
-	 * @param role 권한
+	 * @param roleType 권한
 	 *
 	 * @return List GrantedAuthority
 	 *
 	 * @see GrantedAuthority
 	 */
-	public static List<GrantedAuthority> parseAuthorities(final Role role) {
-		return List.of(getAuthority(role));
+	public static List<GrantedAuthority> parseAuthorities(final RoleType roleType) {
+		return List.of(getAuthority(roleType));
 	}
 
 	/**
 	 * 권한을 받아 시큐리티에서 사용되는 권한을 생성
 	 *
-	 * @param role 권한
+	 * @param roleType 권한
 	 *
 	 * @return SimpleGrantedAuthority
 	 *
 	 * @see SimpleGrantedAuthority
 	 */
-	private static SimpleGrantedAuthority getAuthority(Role role) {
-		return new SimpleGrantedAuthority(ROLE + role);
+	private static SimpleGrantedAuthority getAuthority(RoleType roleType) {
+		return new SimpleGrantedAuthority(ROLE + roleType);
 	}
 
 	/**
