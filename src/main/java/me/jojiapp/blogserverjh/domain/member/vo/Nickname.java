@@ -3,31 +3,31 @@ package me.jojiapp.blogserverjh.domain.member.vo;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.*;
 
-/**
- * 닉네임 VO
- */
 @Embeddable
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@ToString
 public class Nickname {
 
-	/**
-	 * 닉네임
-	 */
 	@Column(nullable = false)
 	private String nickname;
 
-	/**
-	 * 닉네임 생성자 팩토리 메소드
-	 *
-	 * @param nickname 닉네임
-	 *
-	 * @return 닉네임 VO
-	 */
-	public static Nickname of(final String nickname) {
+	public static Nickname from(final String nickname) {
 		return new Nickname(nickname);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Nickname nickname1 = (Nickname) o;
+		return Objects.equals(nickname, nickname1.nickname);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(nickname);
 	}
 }

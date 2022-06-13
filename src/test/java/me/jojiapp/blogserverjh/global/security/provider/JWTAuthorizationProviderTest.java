@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.*;
 public class JWTAuthorizationProviderTest {
 
 	private static final List<GrantedAuthority> authorities =
-			List.of(new SimpleGrantedAuthority("ROLE_%s".formatted(Role.USER)));
+			List.of(new SimpleGrantedAuthority("ROLE_%s".formatted(RoleType.USER)));
 
 	private static final List<String> authoritiesString = authorities.stream()
 			.map(grantedAuthority ->

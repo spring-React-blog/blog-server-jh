@@ -3,32 +3,31 @@ package me.jojiapp.blogserverjh.domain.member.vo;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.*;
 
-/**
- * 이메일 VO
- */
 @Embeddable
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@ToString
 public class Email {
 
-	/**
-	 * 이메일
-	 */
 	@Column(nullable = false, unique = true)
 	private String email;
 
-	/**
-	 * 이메일 생성자 팩토리 메소드
-	 *
-	 * @param email 이메일
-	 *
-	 * @return 이메일 VO
-	 */
-	public static Email of(final String email) {
+	public static Email from(final String email) {
 		return new Email(email);
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Email email1 = (Email) o;
+		return Objects.equals(email, email1.email);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(email);
+	}
 }

@@ -4,28 +4,31 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.*;
+import java.util.*;
 
 @Embeddable
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@ToString
 public class Birth {
 
-	/**
-	 * 생년월일
-	 */
 	@Column(nullable = false)
 	private LocalDateTime birth;
 
-	/**
-	 * 생년월일 생성자 팩토리 메소드
-	 *
-	 * @param birth 생년월일
-	 *
-	 * @return 생년월일 VO
-	 */
-	public static Birth of(final LocalDateTime birth) {
+	public static Birth from(final LocalDateTime birth) {
 		return new Birth(birth);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Birth birth1 = (Birth) o;
+		return Objects.equals(birth, birth1.birth);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(birth);
 	}
 }

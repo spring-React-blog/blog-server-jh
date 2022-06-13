@@ -37,7 +37,7 @@ public class JWTProviderTest {
 	}
 
 	private JWTDTO jwtGenerate(Long id) {
-		return jwtProvider.generate(id, List.of(Role.USER.name()));
+		return jwtProvider.generate(id, List.of(RoleType.USER.name()));
 	}
 
 	@Test
@@ -74,7 +74,7 @@ public class JWTProviderTest {
 		val actual = jwtProvider.getRoles(jwtDto.accessToken());
 
 		// Then
-		assertThat(actual).isEqualTo(List.of(Role.USER.name()));
+		assertThat(actual).isEqualTo(List.of(RoleType.USER.name()));
 	}
 
 	@Test
