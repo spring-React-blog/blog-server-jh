@@ -9,13 +9,20 @@ import java.time.*;
 @MappedSuperclass
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class BaseCreatedBy {
+public abstract class BaseEntity {
 
 	@CreatedBy
 	@Column(updatable = false)
-	private Long createdBy;
+	private String createdBy;
 
 	@CreatedDate
 	@Column(nullable = false, updatable = false)
 	private LocalDateTime createdDateTime;
+
+	@LastModifiedBy
+	private String lastModifiedBy;
+
+	@LastModifiedDate
+	@Column(nullable = false)
+	private LocalDateTime lastModifiedDateTime;
 }
