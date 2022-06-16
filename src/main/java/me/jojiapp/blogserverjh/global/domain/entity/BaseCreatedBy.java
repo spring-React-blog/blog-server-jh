@@ -9,7 +9,7 @@ import java.time.*;
 @MappedSuperclass
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class BaseCreatedBy extends BaseEntity {
+public abstract class BaseCreatedBy {
 
 	@CreatedBy
 	@Column(updatable = false)

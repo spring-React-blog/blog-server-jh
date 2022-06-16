@@ -19,8 +19,8 @@ public class Password {
 		return new Password(password);
 	}
 
-	public static Password create(final String password, final PasswordEncoder passwordEncoder) {
-		return from(passwordEncoder.encode(password));
+	public static Password encoded(final String rawPassword, final PasswordEncoder passwordEncoder) {
+		return from(passwordEncoder.encode(rawPassword));
 	}
 
 	@Override
