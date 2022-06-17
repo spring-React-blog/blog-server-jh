@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.*;
 
 class MemberContextTest {
 
-	public static final String ROLE_USER = "ROLE_%s".formatted(Role.USER);
+	public static final String ROLE_USER = "ROLE_%s".formatted(RoleType.USER);
 
 	@Test
 	@DisplayName("MemberContext에 Member 정보가 정상적으로 할당된다")
@@ -20,14 +20,14 @@ class MemberContextTest {
 		val id = 1L;
 		val email = "email";
 		val password = "encoding password";
-		val memberAuth = new MemberAuth(
+		val memberAuth = new MemberLogin(
 				id,
-				Email.of(email),
-				Password.of(password),
-				Role.USER
+				Email.from(email),
+				Password.from(password),
+				RoleType.USER
 		);
 		// When
-		val memberContext = MemberContext.of(memberAuth);
+		val memberContext = MemberContext.from(memberAuth);
 
 		// Then
 		assertThat(memberContext.getId()).isEqualTo(id);
@@ -41,7 +41,7 @@ class MemberContextTest {
 	@DisplayName("단건의 권한으로 authorities를 생성한다")
 	void parseAuthoritiesSimple() throws Exception {
 		// When
-		val authorities = MemberContext.parseAuthorities(Role.USER);
+		val authorities = MemberContext.parseAuthorities(RoleType.USER);
 
 		// Then
 		assertThat(authorities.get(0).getAuthority()).isEqualTo(ROLE_USER);
@@ -51,7 +51,7 @@ class MemberContextTest {
 	@DisplayName("String 리스트로 된 권한 목록을 받아 authorities를 생성한다")
 	void parseAuthoritiesStringList() throws Exception {
 		// Given
-		List<String> roles = List.of(Role.USER.name());
+		List<String> roles = List.of(RoleType.USER.name());
 
 		// When
 		val authorities = MemberContext.parseAuthorities(roles);

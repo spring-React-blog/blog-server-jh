@@ -8,39 +8,15 @@ import java.util.*;
 
 import static me.jojiapp.blogserverjh.global.jwt.error.JWTError.*;
 
-/**
- * JWT
- */
 @RequiredArgsConstructor
 public class JWTProvider {
 
-	/**
-	 * 권한 클레임 Key
-	 */
 	private static final String AUTHORITIES_KEY = "roles";
 
-	/**
-	 * 권한 구분자
-	 */
 	private static final String delimiter = ", ";
 
-	/**
-	 * JWT 설정
-	 *
-	 * @see JWTProperties JWT 설정 클래스
-	 */
 	private final JWTProperties jwtProperties;
 
-	/**
-	 * 토큰 생성
-	 *
-	 * @param issuerId 발급자 고유 아이디
-	 * @param roles    권한 리스트
-	 *
-	 * @return Access Token, Refresh Token
-	 *
-	 * @see JWTDTO
-	 */
 	public JWTDTO generate(final Long issuerId, final List<String> roles) {
 		val now = new Date();
 		val accessToken = Jwts.builder()
@@ -59,26 +35,10 @@ public class JWTProvider {
 		return new JWTDTO(accessToken, refreshToken);
 	}
 
-	/**
-	 * 발급자 조회
-	 *
-	 * @param token JWT로 인코딩 된 토큰
-	 *
-	 * @return 발급자 고유 아이디
-	 */
 	public Long getIssuer(final String token) {
 		return Long.valueOf(getClaims(token).getIssuer());
 	}
 
-	/**
-	 * 클레임 조회
-	 *
-	 * @param token JWT로 인코딩 된 토큰
-	 *
-	 * @return 전체 클레임
-	 *
-	 * @throws JwtException 토큰을 사용하기에 문제가 있을 경우 발생하는 예외
-	 */
 	private Claims getClaims(final String token) {
 		try {
 			return Jwts.parserBuilder()
@@ -93,27 +53,12 @@ public class JWTProvider {
 		}
 	}
 
-	/**
-	 * 권한 조회
-	 *
-	 * @param token JWT로 인코딩 된 토큰
-	 *
-	 * @return 권한 리스트
-	 */
 	public List<String> getRoles(final String token) {
 		String rolesJoin = (String) getClaims(token).get(AUTHORITIES_KEY);
 		if (rolesJoin == null) return List.of();
 		return Arrays.stream(rolesJoin.split(delimiter)).toList();
 	}
 
-	/**
-	 * 토큰 발급자 일치 여부
-	 *
-	 * @param accessToken  만료된 Access Token
-	 * @param refreshToken 만료되지 않은 Refresh Token
-	 *
-	 * @return Access Token과 Refresh Token의 Issuer 동일 여부
-	 */
 	public boolean match(final String accessToken, final String refreshToken) {
 		validationAccessToken(accessToken);
 		validationRefreshToken(refreshToken);
@@ -125,13 +70,6 @@ public class JWTProvider {
 		}
 	}
 
-	/**
-	 * 해당 토큰이 Access Token 인지 여부
-	 *
-	 * @param token JWT로 인코딩 된 토큰
-	 *
-	 * @return Access Token 여부
-	 */
 	public boolean isAccessToken(final String token) {
 		try {
 			return !getRoles(token).equals(List.of());
@@ -140,24 +78,10 @@ public class JWTProvider {
 		}
 	}
 
-	/**
-	 * Access Token인지 유효성 검사
-	 *
-	 * @param accessToken JWT로 인코딩 된 Access Token
-	 *
-	 * @throws JwtException
-	 */
 	private void validationAccessToken(final String accessToken) {
 		if (!isAccessToken(accessToken)) throw new JwtException(NOT_ACCESS_TOKEN.getMessage());
 	}
 
-	/**
-	 * Refresh Token인지 유효성 검사
-	 *
-	 * @param refreshToken JWT로 인코딩 된 Refresh Token
-	 *
-	 * @throws JwtException
-	 */
 	private void validationRefreshToken(final String refreshToken) {
 		if (isAccessToken(refreshToken)) throw new JwtException(NOT_REFRESH_TOKEN.getMessage());
 	}

@@ -9,25 +9,25 @@ import java.util.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Email {
+public class Nickname {
 
-	@Column(nullable = false, unique = true)
-	private String email;
+	@Column(nullable = false)
+	private String nickname;
 
-	public static Email from(final String email) {
-		return new Email(email);
+	public static Nickname from(final String nickname) {
+		return new Nickname(nickname);
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		Email email1 = (Email) o;
-		return Objects.equals(email, email1.email);
+		Nickname nickname1 = (Nickname) o;
+		return Objects.equals(nickname, nickname1.nickname);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(email);
+		return Objects.hash(nickname);
 	}
 }

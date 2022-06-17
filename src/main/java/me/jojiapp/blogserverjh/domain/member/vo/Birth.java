@@ -3,31 +3,32 @@ package me.jojiapp.blogserverjh.domain.member.vo;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.*;
 import java.util.*;
 
 @Embeddable
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Email {
+public class Birth {
 
-	@Column(nullable = false, unique = true)
-	private String email;
+	@Column(nullable = false)
+	private LocalDateTime birth;
 
-	public static Email from(final String email) {
-		return new Email(email);
+	public static Birth from(final LocalDateTime birth) {
+		return new Birth(birth);
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		Email email1 = (Email) o;
-		return Objects.equals(email, email1.email);
+		Birth birth1 = (Birth) o;
+		return Objects.equals(birth, birth1.birth);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(email);
+		return Objects.hash(birth);
 	}
 }
