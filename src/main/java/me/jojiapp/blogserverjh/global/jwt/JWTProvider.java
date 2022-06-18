@@ -56,7 +56,7 @@ public class JWTProvider {
 	}
 
 	public List<String> getRoles(final String token) {
-		String rolesJoin = (String) getClaims(token).get(AUTHORITIES_KEY);
+		val rolesJoin = (String) getClaims(token).get(AUTHORITIES_KEY);
 		if (rolesJoin == null) return List.of();
 		return Arrays.stream(rolesJoin.split(delimiter)).toList();
 	}
