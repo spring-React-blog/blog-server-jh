@@ -1,6 +1,7 @@
 package me.jojiapp.blogserverjh.global.security.service;
 
 import lombok.*;
+import me.jojiapp.blogserverjh.domain.member.exception.*;
 import me.jojiapp.blogserverjh.domain.member.repo.*;
 import me.jojiapp.blogserverjh.domain.member.vo.*;
 import me.jojiapp.blogserverjh.global.security.context.*;
@@ -29,8 +30,7 @@ class MemberDetailsServiceTest {
 	void test1() throws Exception {
 		// When & Then
 		assertThatThrownBy(() -> memberDetailsService.loadUserByUsername("not@gmail.com"))
-				.isInstanceOf(UsernameNotFoundException.class)
-				.hasMessage("회원을 찾을 수 없습니다.");
+				.isInstanceOf(MemberNotFoundException.class);
 	}
 
 	@Test

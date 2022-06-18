@@ -21,7 +21,7 @@ class MemberCustomRepoTest {
 		@DisplayName("이메일이 존재하면 AccessTokenResponse를 반환한다")
 		void test1() throws Exception {
 			// Given
-			memberRepo.save(getGivenMember());
+			memberRepo.save(givenMember());
 			val email = Email.from(EMAIL);
 
 			// When

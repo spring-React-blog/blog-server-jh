@@ -7,12 +7,10 @@ import org.springframework.security.core.authority.*;
 
 import java.util.*;
 
+import static me.jojiapp.blogserverjh.global.security.context.MemberContextGiven.*;
 import static org.assertj.core.api.Assertions.*;
 
-class MemberContextTest {
-
-	public static final String ROLE_USER = "ROLE_%s".formatted(RoleType.USER);
-
+public class MemberContextTest {
 	@Test
 	@DisplayName("MemberContext에 Member 정보가 정상적으로 할당된다")
 	void newMemberContext() throws Exception {

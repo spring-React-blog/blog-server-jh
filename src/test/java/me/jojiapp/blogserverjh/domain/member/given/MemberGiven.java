@@ -14,7 +14,7 @@ public class MemberGiven {
 	public static final String NICKNAME = "닉네임";
 	public static final LocalDateTime BIRTH = LocalDateTime.of(2022, 2, 2, 2, 2);
 
-	public static Member getGivenMember() {
+	public static Member givenMember() {
 		return Member.builder()
 				.id(null)
 				.email(EMAIL)

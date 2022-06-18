@@ -1,6 +1,7 @@
 package me.jojiapp.blogserverjh.global.security.service;
 
 import lombok.*;
+import me.jojiapp.blogserverjh.domain.member.exception.*;
 import me.jojiapp.blogserverjh.domain.member.repo.*;
 import me.jojiapp.blogserverjh.domain.member.vo.*;
 import me.jojiapp.blogserverjh.global.security.context.*;
@@ -15,6 +16,6 @@ public class MemberDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
 		return memberRepo.findLoginAuthByEmail(Email.from(email))
 				.map(MemberContext::from)
-				.orElseThrow(() -> new UsernameNotFoundException("회원을 찾을 수 없습니다."));
+				.orElseThrow(MemberNotFoundException::new);
 	}
 }
