@@ -3,7 +3,7 @@ package me.jojiapp.blogserverjh.global.jwt;
 import io.jsonwebtoken.*;
 import lombok.*;
 import me.jojiapp.blogserverjh.domain.member.vo.*;
-import me.jojiapp.blogserverjh.global.jwt.dto.*;
+import me.jojiapp.blogserverjh.global.jwt.dto.response.*;
 import org.junit.jupiter.api.*;
 
 import java.util.*;
@@ -32,11 +32,11 @@ public class JWTProviderTest {
 		this.jwtProvider = new JWTProvider(jwtProperties);
 	}
 
-	private JWTDTO jwtGenerate() {
+	private JWTResponse jwtGenerate() {
 		return jwtGenerate(EMAIL);
 	}
 
-	private JWTDTO jwtGenerate(String email) {
+	private JWTResponse jwtGenerate(String email) {
 		return jwtProvider.generate(email, List.of(RoleType.USER.name()));
 	}
 

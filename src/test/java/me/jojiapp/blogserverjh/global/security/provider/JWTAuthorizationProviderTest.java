@@ -3,7 +3,7 @@ package me.jojiapp.blogserverjh.global.security.provider;
 import lombok.*;
 import me.jojiapp.blogserverjh.domain.member.vo.*;
 import me.jojiapp.blogserverjh.global.jwt.*;
-import me.jojiapp.blogserverjh.global.jwt.dto.*;
+import me.jojiapp.blogserverjh.global.jwt.dto.response.*;
 import me.jojiapp.blogserverjh.global.jwt.error.*;
 import me.jojiapp.blogserverjh.global.security.authentication.*;
 import me.jojiapp.blogserverjh.global.security.exception.*;
@@ -63,8 +63,8 @@ public class JWTAuthorizationProviderTest {
 	@DisplayName("Access Token을 기반으로 Authentication 객체를 생성하여 반환한다")
 	void authenticate() throws Exception {
 		// Given
-		val jwtDto = getJWTDTO();
-		val authentication = JWTAccessTokenAuthentication.of(jwtDto.accessToken());
+		val jwtResponse = getJWTResponse();
+		val authentication = JWTAccessTokenAuthentication.of(jwtResponse.accessToken());
 
 		// When
 		Authentication actual = jwtAuthorizationProvider.authenticate(authentication);
@@ -75,7 +75,7 @@ public class JWTAuthorizationProviderTest {
 		assertThat(actual.getAuthorities()).isEqualTo(authorities);
 	}
 
-	private JWTDTO getJWTDTO() {
+	private JWTResponse getJWTResponse() {
 		return jwtProvider.generate(EMAIL, authoritiesString);
 	}
 
@@ -83,8 +83,8 @@ public class JWTAuthorizationProviderTest {
 	@DisplayName("Access Token이 아닐 경우 JWTAuthenticationException이 발생한다")
 	void isAccessToken() throws Exception {
 		// Given
-		val jwtDto = getJWTDTO();
-		val authentication = JWTAccessTokenAuthentication.of(jwtDto.refreshToken());
+		val jwtResponse = getJWTResponse();
+		val authentication = JWTAccessTokenAuthentication.of(jwtResponse.refreshToken());
 
 		// When & Then
 		assertThatThrownBy(() -> jwtAuthorizationProvider.authenticate(authentication))
@@ -97,8 +97,8 @@ public class JWTAuthorizationProviderTest {
 	void expiredAccessToken() throws Exception {
 		// Given
 		setJwtProvider(-1L, 2L);
-		val jwtDto = getJWTDTO();
-		val authentication = JWTAccessTokenAuthentication.of(jwtDto.accessToken());
+		val jwtResponse = getJWTResponse();
+		val authentication = JWTAccessTokenAuthentication.of(jwtResponse.accessToken());
 
 		// When & Then
 		assertThatThrownBy(() -> jwtAuthorizationProvider.authenticate(authentication))

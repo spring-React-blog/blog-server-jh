@@ -2,7 +2,7 @@ package me.jojiapp.blogserverjh.global.jwt;
 
 import io.jsonwebtoken.*;
 import lombok.*;
-import me.jojiapp.blogserverjh.global.jwt.dto.*;
+import me.jojiapp.blogserverjh.global.jwt.dto.response.*;
 
 import java.util.*;
 
@@ -17,7 +17,7 @@ public class JWTProvider {
 
 	private final JWTProperties jwtProperties;
 
-	public JWTDTO generate(final String issuer, final List<String> roles) {
+	public JWTResponse generate(final String issuer, final List<String> roles) {
 		val now = new Date();
 		val accessToken = Jwts.builder()
 				.setIssuer(issuer)
@@ -32,7 +32,7 @@ public class JWTProvider {
 				.signWith(jwtProperties.getKey())
 				.compact();
 
-		return new JWTDTO(accessToken, refreshToken);
+		return new JWTResponse(accessToken, refreshToken);
 	}
 
 	public String getIssuer(final String token) {
