@@ -35,11 +35,6 @@ public class Member extends BaseEntity {
 	@Column(nullable = false)
 	private RoleType role;
 
-
-	private Member(final Long id) {
-		this.id = id;
-	}
-
 	@Builder
 	private Member(
 			final Long id,

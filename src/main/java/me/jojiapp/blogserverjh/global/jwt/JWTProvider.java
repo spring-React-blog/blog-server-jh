@@ -17,17 +17,17 @@ public class JWTProvider {
 
 	private final JWTProperties jwtProperties;
 
-	public JWTDTO generate(final Long issuerId, final List<String> roles) {
+	public JWTDTO generate(final String issuer, final List<String> roles) {
 		val now = new Date();
 		val accessToken = Jwts.builder()
-				.setIssuer(issuerId.toString())
+				.setIssuer(issuer)
 				.claim(AUTHORITIES_KEY, String.join(delimiter, roles))
 				.setExpiration(jwtProperties.getAccessTokenExpiredDate(now))
 				.signWith(jwtProperties.getKey())
 				.compact();
 
 		val refreshToken = Jwts.builder()
-				.setIssuer(issuerId.toString())
+				.setIssuer(issuer)
 				.setExpiration(jwtProperties.getRefreshTokenExpiredDate(now))
 				.signWith(jwtProperties.getKey())
 				.compact();
@@ -35,8 +35,8 @@ public class JWTProvider {
 		return new JWTDTO(accessToken, refreshToken);
 	}
 
-	public Long getIssuer(final String token) {
-		return Long.valueOf(getClaims(token).getIssuer());
+	public String getIssuer(final String token) {
+		return getClaims(token).getIssuer();
 	}
 
 	private Claims getClaims(final String token) {
@@ -66,7 +66,7 @@ public class JWTProvider {
 			getIssuer(accessToken);
 			throw new JwtException(ACCESS_TOKEN_NOT_EXPIRED.getMessage());
 		} catch (ExpiredJwtException e) {
-			return Long.valueOf(e.getClaims().getIssuer()).equals(getIssuer(refreshToken));
+			return e.getClaims().getIssuer().equals(getIssuer(refreshToken));
 		}
 	}
 

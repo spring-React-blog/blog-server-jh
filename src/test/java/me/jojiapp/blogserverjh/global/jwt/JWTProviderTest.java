@@ -14,7 +14,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.*;
 
 public class JWTProviderTest {
 
-	private static final Long ID = 1L;
+	private static final String EMAIL = "test@gmail.com";
 	private JWTProvider jwtProvider;
 
 	@BeforeEach
@@ -33,11 +33,11 @@ public class JWTProviderTest {
 	}
 
 	private JWTDTO jwtGenerate() {
-		return jwtGenerate(ID);
+		return jwtGenerate(EMAIL);
 	}
 
-	private JWTDTO jwtGenerate(Long id) {
-		return jwtProvider.generate(id, List.of(RoleType.USER.name()));
+	private JWTDTO jwtGenerate(String email) {
+		return jwtProvider.generate(email, List.of(RoleType.USER.name()));
 	}
 
 	@Test
@@ -61,7 +61,7 @@ public class JWTProviderTest {
 		val actual = jwtProvider.getIssuer(jwtDto.accessToken());
 
 		// Then
-		assertThat(actual).isEqualTo(ID);
+		assertThat(actual).isEqualTo(EMAIL);
 	}
 
 	@Test
@@ -98,7 +98,7 @@ public class JWTProviderTest {
 			// Given
 			setJwtProvider(-1L, 2L);
 			val jwtDto1 = jwtGenerate();
-			val jwtDto2 = jwtGenerate(2L);
+			val jwtDto2 = jwtGenerate("not@gmail.com");
 
 			// When
 			val actualMatch = jwtProvider.match(jwtDto1.accessToken(), jwtDto1.refreshToken());
