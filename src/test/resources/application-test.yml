@@ -1,0 +1,9 @@
+jwt:
+  secret-key: AOSJDOIWQNOINAOISDJOASJDJXCOIMASOMOWQMCAO
+  access-token-expired-minutes: 30
+  refresh-token-expired-minutes: 60
+
+spring:
+  redis:
+    host: localhost
+    port: 6370

@@ -55,7 +55,7 @@ public class JWTAuthorizationProviderTest {
 	@Test
 	@DisplayName("JWTAccessTokenAuthentication 클래스를 지원한다")
 	void support() throws Exception {
-		val actual = jwtAuthorizationProvider.supports(JWTAccessTokenAuthentication.class);
+		val actual = jwtAuthorizationProvider.supports(JWTAccessTokenAuthenticationToken.class);
 		assertThat(actual).isTrue();
 	}
 
@@ -64,7 +64,7 @@ public class JWTAuthorizationProviderTest {
 	void authenticate() throws Exception {
 		// Given
 		val jwtResponse = getJWTResponse();
-		val authentication = JWTAccessTokenAuthentication.of(jwtResponse.accessToken());
+		val authentication = JWTAccessTokenAuthenticationToken.from(jwtResponse.accessToken());
 
 		// When
 		Authentication actual = jwtAuthorizationProvider.authenticate(authentication);
@@ -84,7 +84,7 @@ public class JWTAuthorizationProviderTest {
 	void isAccessToken() throws Exception {
 		// Given
 		val jwtResponse = getJWTResponse();
-		val authentication = JWTAccessTokenAuthentication.of(jwtResponse.refreshToken());
+		val authentication = JWTAccessTokenAuthenticationToken.from(jwtResponse.refreshToken());
 
 		// When & Then
 		assertThatThrownBy(() -> jwtAuthorizationProvider.authenticate(authentication))
@@ -98,7 +98,7 @@ public class JWTAuthorizationProviderTest {
 		// Given
 		setJwtProvider(-1L, 2L);
 		val jwtResponse = getJWTResponse();
-		val authentication = JWTAccessTokenAuthentication.of(jwtResponse.accessToken());
+		val authentication = JWTAccessTokenAuthenticationToken.from(jwtResponse.accessToken());
 
 		// When & Then
 		assertThatThrownBy(() -> jwtAuthorizationProvider.authenticate(authentication))

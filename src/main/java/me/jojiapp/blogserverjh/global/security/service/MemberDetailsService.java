@@ -6,7 +6,11 @@ import me.jojiapp.blogserverjh.domain.member.repo.*;
 import me.jojiapp.blogserverjh.domain.member.vo.*;
 import me.jojiapp.blogserverjh.global.security.context.*;
 import org.springframework.security.core.userdetails.*;
+import org.springframework.stereotype.*;
+import org.springframework.transaction.annotation.*;
 
+@Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MemberDetailsService implements UserDetailsService {
 

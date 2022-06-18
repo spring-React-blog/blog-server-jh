@@ -1,18 +1,20 @@
 package me.jojiapp.blogserverjh.global.security.provider;
 
 import lombok.*;
+import lombok.extern.slf4j.*;
 import me.jojiapp.blogserverjh.global.security.exception.*;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.*;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.security.crypto.password.*;
+import org.springframework.stereotype.*;
 
+@Component
 @RequiredArgsConstructor
 public class LoginAuthenticationProvider implements AuthenticationProvider {
 
 	private final PasswordEncoder passwordEncoder;
 	private final UserDetailsService userDetailsService;
-
 
 	@Override
 	public Authentication authenticate(final Authentication authentication) throws AuthenticationException {

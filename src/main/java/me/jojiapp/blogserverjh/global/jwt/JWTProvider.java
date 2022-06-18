@@ -3,12 +3,14 @@ package me.jojiapp.blogserverjh.global.jwt;
 import io.jsonwebtoken.*;
 import lombok.*;
 import me.jojiapp.blogserverjh.global.jwt.dto.response.*;
+import org.springframework.stereotype.*;
 
 import java.util.*;
 
 import static me.jojiapp.blogserverjh.global.jwt.error.JWTError.*;
 
 @RequiredArgsConstructor
+@Component
 public class JWTProvider {
 
 	private static final String AUTHORITIES_KEY = "roles";

@@ -32,7 +32,7 @@ class MemberCustomRepoTest {
 
 			val actual = loginAUth.get();
 			assertThat(actual.email()).isEqualTo(Email.from(EMAIL));
-			assertThat(actual.password()).isEqualTo(Password.from(PASSWORD));
+			assertThat(actual.password()).isEqualTo(Password.from(ENCODED_PASSWORD));
 			assertThat(actual.roleType()).isEqualTo(RoleType.USER);
 		}
 
