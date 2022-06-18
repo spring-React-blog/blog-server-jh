@@ -24,7 +24,6 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 	public static final String BEARER = "Bearer ";
 	public static final String UTF_8 = "UTF-8";
 	private final AuthenticationManager authenticationManager;
-
 	private final ObjectMapper objectMapper;
 
 	@Override
@@ -37,7 +36,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
 		val accessToken = authorization.substring(BEARER.length());
 		try {
-			Authentication authenticate = authenticationManager
+			val authenticate = authenticationManager
 					.authenticate(JWTAccessTokenAuthentication.of(accessToken));
 			SecurityContextHolder.getContext().setAuthentication(authenticate);
 		} catch (AuthenticationException e) {
