@@ -29,12 +29,12 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response, final FilterChain filterChain) throws ServletException, IOException {
 		val authorization = request.getHeader(AUTHORIZATION);
-		val accessToken = authorization.substring(BEARER.length());
 		if (isNotAuthorizationStartWithBearer(authorization)) {
 			filterChain.doFilter(request, response);
 			return;
 		}
 
+		val accessToken = authorization.substring(BEARER.length());
 		try {
 			val authenticate = authenticationManager
 					.authenticate(JWTAccessTokenAuthenticationToken.from(accessToken));

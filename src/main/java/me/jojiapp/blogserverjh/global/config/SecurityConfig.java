@@ -19,6 +19,8 @@ import org.springframework.web.cors.*;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+	private static final String API_PUBLIC = "/api/public/**";
+	private static final String DOCS = "/docs/**";
 	private final CorsConfigurationSource corsConfigurationSource;
 	private final AuthenticationManagerBuilder authenticationManagerBuilder;
 	private final AuthenticationConfiguration authenticationConfiguration;
@@ -41,7 +43,7 @@ public class SecurityConfig {
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {
 		return web -> web.ignoring()
-				.antMatchers("/favicon.ico", "/docs/**");
+				.antMatchers("/favicon.ico", DOCS);
 	}
 
 	@Bean
@@ -62,9 +64,7 @@ public class SecurityConfig {
 				.disable()
 				.and()
 				.authorizeRequests(authz -> {
-					authz.antMatchers("/docs/index.html")
-							.permitAll()
-							.antMatchers("/api/auth/**")
+					authz.antMatchers(API_PUBLIC)
 							.permitAll()
 							.anyRequest().authenticated();
 				})

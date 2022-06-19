@@ -14,7 +14,8 @@ import static org.assertj.core.api.Assertions.*;
 public class JWTPropertiesTest {
 
 	public static final String SECRET_KEY = "ASDAOSDMASMDOASOMDOOMQDWOMQWDMOODQWMOQWD";
-	private final JWTProperties jwtProperties = new JWTProperties(SECRET_KEY, 1L, 2L);
+	public static final long REFRESH_TOKEN_EXPIRED_MINUTES = 2L;
+	private final JWTProperties jwtProperties = new JWTProperties(SECRET_KEY, 1L, REFRESH_TOKEN_EXPIRED_MINUTES);
 
 	@Test
 	@DisplayName("서명에 사용될 Key를 조회한다")
@@ -59,4 +60,16 @@ public class JWTPropertiesTest {
 		return new Date(now.getTime() + Duration.ofMinutes(expiredMinutes).toMillis());
 	}
 
+	@Test
+	@DisplayName("Refresh Token 만료 시간 초 던위 조회")
+	void getRefreshTokenExpiredSeconds() throws Exception {
+		// Given
+		long refreshTokenExpiredSeconds = Duration.ofMinutes(REFRESH_TOKEN_EXPIRED_MINUTES).toSeconds();
+
+		// When
+		int actual = jwtProperties.getRefreshTokenExpiredSeconds();
+
+		// Then
+		assertThat(actual).isEqualTo(refreshTokenExpiredSeconds);
+	}
 }
