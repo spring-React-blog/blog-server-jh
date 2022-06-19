@@ -81,4 +81,26 @@
 링크는 `_links`라는 키로 제공한다.
 본 API의 사용자(클라이언트)는 URI를 직접 생성하지 않아야 하며, 리소스에서 제공하는 링크를 사용해야 한다.
 
+[[resources-auth]]
+== 인증
+
+[[resources-auth-login]]
+=== 로그인
+
 operation::api/public/auth/login[snippets='http-request,request-headers,request-fields,http-response,response-headers,response-fields']
+
+[[resources-auth-error-binding]]
+==== 바인딩 실패
+
+operation::api/public/auth/login/error/binding[snippets='http-response,response-headers,response-fields']
+
+[[resources-auth-error-member-not-found]]
+==== 존재하지 않는 이메일
+
+operation::api/public/auth/login/error/member-not-found[snippets='http-response,response-headers,response-fields']
+
+[[resources-auth-error-password-not-match]]
+==== 비밀번호 불일치
+
+operation::api/public/auth/login/error/password-not-match[snippets='http-response,response-headers,response-fields']
+

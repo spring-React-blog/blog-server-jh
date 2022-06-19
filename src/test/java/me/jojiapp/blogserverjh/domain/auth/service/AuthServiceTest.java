@@ -37,10 +37,6 @@ class AuthServiceTest {
 		this.authService = new AuthService(authenticationManager, jwtProvider);
 	}
 
-	private void setJwtProvider() {
-
-	}
-
 	@Test
 	@DisplayName("이메일과 비밀번호를 통해 로그인에 성공하면 AccessToken과 RefreshToken을 반환한다")
 	void login() throws Exception {

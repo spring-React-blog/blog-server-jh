@@ -16,6 +16,7 @@ import javax.validation.*;
 @RequiredArgsConstructor
 public class AuthAPI {
 
+	private static final String REFRESH_TOKEN = "refreshToken";
 	private final AuthService authService;
 	private final JWTProperties jwtProperties;
 
@@ -30,7 +31,6 @@ public class AuthAPI {
 	}
 
 	private Cookie createRefreshTokenCookie(final String refreshToken) {
-		val REFRESH_TOKEN = "refreshToken";
 		val cookie = new Cookie(REFRESH_TOKEN, refreshToken);
 		cookie.setMaxAge(jwtProperties.getRefreshTokenExpiredSeconds());
 		cookie.setDomain("localhost:8080");

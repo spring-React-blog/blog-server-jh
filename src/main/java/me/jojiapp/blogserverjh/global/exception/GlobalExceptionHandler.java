@@ -2,12 +2,15 @@ package me.jojiapp.blogserverjh.global.exception;
 
 import lombok.*;
 import lombok.extern.slf4j.*;
+import me.jojiapp.blogserverjh.global.exception.convertor.*;
 import me.jojiapp.blogserverjh.global.response.*;
 import org.springframework.http.*;
+import org.springframework.validation.*;
 import org.springframework.web.*;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.*;
+import java.util.stream.*;
 
 import static me.jojiapp.blogserverjh.global.exception.GlobalError.*;
 
@@ -16,6 +19,8 @@ import static me.jojiapp.blogserverjh.global.exception.GlobalError.*;
 @RequiredArgsConstructor
 public class GlobalExceptionHandler {
 
+	private final BindingErrorConvertor bindingErrorConvertor;
+
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
 	@ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
 	private APIResponse<Void> httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
@@ -23,11 +28,15 @@ public class GlobalExceptionHandler {
 		return APIResponse.error(METHOD_NOT_ALLOWED.getMessage());
 	}
 
-	@ExceptionHandler({IllegalArgumentException.class, IllegalStateException.class})
+	@ExceptionHandler(BindException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	private APIResponse<Void> badRequestException(RuntimeException e) {
+	private APIResponse<Void> bindingError(BindException e) {
 		log.error("message", e);
-		return APIResponse.error(e.getMessage());
+		return APIResponse.error(
+				e.getFieldErrors().stream()
+						.map(bindingErrorConvertor::getBindingError)
+						.collect(Collectors.joining(", "))
+		);
 	}
 
 	@ExceptionHandler(EntityNotFoundException.class)
@@ -35,6 +44,13 @@ public class GlobalExceptionHandler {
 	private APIResponse<Void> entityNotFoundException(EntityNotFoundException e) {
 		log.error("message", e);
 		return APIResponse.error(ENTITY_NOT_FOUND.getMessage());
+	}
+
+	@ExceptionHandler(RuntimeException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	private APIResponse<Void> badRequestException(RuntimeException e) {
+		log.error("message", e);
+		return APIResponse.error(e.getMessage());
 	}
 
 	@ExceptionHandler(Exception.class)
