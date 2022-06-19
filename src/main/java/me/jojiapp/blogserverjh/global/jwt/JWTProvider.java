@@ -84,7 +84,7 @@ public class JWTProvider {
 		if (!isAccessToken(accessToken)) throw new JwtException(NOT_ACCESS_TOKEN.getMessage());
 	}
 
-	private void validationRefreshToken(final String refreshToken) {
+	public void validationRefreshToken(final String refreshToken) {
 		if (isAccessToken(refreshToken)) throw new JwtException(NOT_REFRESH_TOKEN.getMessage());
 	}
 }

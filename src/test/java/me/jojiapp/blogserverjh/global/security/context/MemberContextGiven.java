@@ -16,7 +16,7 @@ public class MemberContextGiven {
 	public static LoginAuth givenLoginAuth() {
 		return new LoginAuth(
 				Email.from(EMAIL),
-				Password.from(PASSWORD),
+				Password.from(ENCODED_PASSWORD),
 				RoleType.USER
 		);
 	}

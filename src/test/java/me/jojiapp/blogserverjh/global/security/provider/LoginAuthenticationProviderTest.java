@@ -44,7 +44,7 @@ class LoginAuthenticationProviderTest {
 	void authenticate() throws Exception {
 		// Given
 		val authenticationToken = new UsernamePasswordAuthenticationToken(EMAIL, PASSWORD);
-		given(passwordEncoder.matches(PASSWORD, PASSWORD)).willReturn(true);
+		given(passwordEncoder.matches(PASSWORD, ENCODED_PASSWORD)).willReturn(true);
 		given(userDetailsService.loadUserByUsername(EMAIL))
 				.willReturn(givenMemberContext());
 
@@ -62,7 +62,7 @@ class LoginAuthenticationProviderTest {
 	void passwordNotMatch() throws Exception {
 		// Given
 		val authenticationToken = new UsernamePasswordAuthenticationToken(EMAIL, "rawPassword");
-		given(passwordEncoder.matches("rawPassword", PASSWORD)).willReturn(false);
+		given(passwordEncoder.matches("rawPassword", ENCODED_PASSWORD)).willReturn(false);
 		given(userDetailsService.loadUserByUsername(EMAIL))
 				.willReturn(givenMemberContext());
 

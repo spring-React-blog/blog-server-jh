@@ -9,7 +9,7 @@ import java.util.*;
 
 public final class MemberContext extends User {
 
-	private static final String ROLE = "ROLE_";
+	public static final String ROLE = "ROLE_";
 
 	private MemberContext(final LoginAuth loginAuth) {
 		super(loginAuth.email().getEmail(),

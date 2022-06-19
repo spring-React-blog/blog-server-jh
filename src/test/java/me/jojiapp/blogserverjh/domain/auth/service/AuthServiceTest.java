@@ -1,7 +1,9 @@
 package me.jojiapp.blogserverjh.domain.auth.service;
 
+import io.jsonwebtoken.*;
 import lombok.*;
 import me.jojiapp.blogserverjh.domain.auth.dto.request.*;
+import me.jojiapp.blogserverjh.domain.member.repo.*;
 import me.jojiapp.blogserverjh.domain.member.vo.*;
 import me.jojiapp.blogserverjh.global.jwt.*;
 import me.jojiapp.blogserverjh.global.security.context.*;
@@ -10,8 +12,11 @@ import org.junit.jupiter.api.*;
 import org.mockito.*;
 import org.springframework.security.authentication.*;
 
+import java.util.*;
+
 import static me.jojiapp.blogserverjh.domain.member.given.MemberGiven.*;
 import static me.jojiapp.blogserverjh.global.jwt.JWTPropertiesTest.*;
+import static me.jojiapp.blogserverjh.global.jwt.error.JWTError.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
@@ -20,6 +25,8 @@ class AuthServiceTest {
 
 	@Mock
 	private AuthenticationManager authenticationManager;
+	@Mock
+	private MemberRepo memberRepo;
 
 	private JWTProvider jwtProvider;
 
@@ -34,7 +41,7 @@ class AuthServiceTest {
 		);
 
 		this.jwtProvider = new JWTProvider(jwtProperties);
-		this.authService = new AuthService(authenticationManager, jwtProvider);
+		this.authService = new AuthService(authenticationManager, jwtProvider, memberRepo);
 	}
 
 	@Test
@@ -50,12 +57,48 @@ class AuthServiceTest {
 		given(authenticationManager.authenticate(authenticationToken)).willReturn(authenticate);
 
 		// When
-		val jwtResponse = authService.login(memberLogin);
+		val actual = authService.login(memberLogin);
 
 		// Then
-		assertThat(jwtProvider.getIssuer(jwtResponse.accessToken())).isEqualTo(EMAIL);
-		assertThat(jwtProvider.getRoles(jwtResponse.accessToken())).contains("ROLE_" + RoleType.USER.name());
-		assertThat(jwtProvider.isAccessToken(jwtResponse.refreshToken())).isFalse();
+		assertThat(jwtProvider.getIssuer(actual.accessToken())).isEqualTo(EMAIL);
+		assertThat(jwtProvider.getRoles(actual.accessToken())).contains(RoleType.USER.name());
+		assertThat(jwtProvider.getIssuer(actual.refreshToken())).isEqualTo(EMAIL);
+		assertThat(jwtProvider.isAccessToken(actual.refreshToken())).isFalse();
+	}
+
+
+	@Nested
+	class Refresh {
+
+		@Test
+		@DisplayName("Refresh Token을 전달받아 AccessToken과 Refresh Token을 반환한다")
+		void refresh() throws Exception {
+			// Given
+			val jwtResponse = jwtProvider.generate(EMAIL, List.of(RoleType.USER.name()));
+			given(memberRepo.findLoginAuthByEmail(Email.from(EMAIL))).willReturn(Optional.of(MemberContextGiven.givenLoginAuth()));
+
+			// When
+			val actual = authService.refresh(jwtResponse.refreshToken());
+
+			// Then
+			assertThat(jwtProvider.getIssuer(actual.accessToken())).isEqualTo(EMAIL);
+			assertThat(jwtProvider.getRoles(actual.accessToken())).contains(RoleType.USER.name());
+			assertThat(jwtProvider.getIssuer(actual.refreshToken())).isEqualTo(EMAIL);
+			assertThat(jwtProvider.isAccessToken(actual.refreshToken())).isFalse();
+		}
+
+		@Test
+		@DisplayName("Refresh Token이 아닐경우 JwtException이 발생한다")
+		void notRefreshToken() throws Exception {
+			// Given
+			val jwtResponse = jwtProvider.generate(EMAIL, List.of(RoleType.USER.name()));
+
+			// When & Then
+			assertThatThrownBy(() -> authService.refresh(jwtResponse.accessToken()))
+					.isInstanceOf(JwtException.class)
+					.hasMessage(NOT_REFRESH_TOKEN.getMessage());
+		}
+
 	}
 
 }
