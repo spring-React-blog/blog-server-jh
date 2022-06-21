@@ -5,6 +5,7 @@ import me.jojiapp.blogserverjh.domain.auth.dto.request.*;
 import me.jojiapp.blogserverjh.domain.auth.dto.response.*;
 import me.jojiapp.blogserverjh.domain.auth.service.*;
 import me.jojiapp.blogserverjh.global.jwt.*;
+import me.jojiapp.blogserverjh.global.jwt.dto.response.*;
 import me.jojiapp.blogserverjh.global.response.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,5 +36,15 @@ public class AuthAPI {
 		cookie.setMaxAge(jwtProperties.getRefreshTokenExpiredSeconds());
 		cookie.setDomain("localhost:8080");
 		return cookie;
+	}
+
+	@PostMapping("/refresh")
+	private APIResponse<AccessTokenResponse> refresh(
+			@CookieValue(name = "refreshToken") final String refreshToken,
+			final HttpServletResponse response
+	) {
+		val jwtResponse = authService.refresh(refreshToken);
+		response.addCookie(createRefreshTokenCookie(jwtResponse.refreshToken()));
+		return APIResponse.success(new AccessTokenResponse(jwtResponse.accessToken()));
 	}
 }

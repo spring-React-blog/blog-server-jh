@@ -104,3 +104,13 @@ operation::api/public/auth/login/error/member-not-found[snippets='http-response,
 
 operation::api/public/auth/login/error/password-not-match[snippets='http-response,response-headers,response-fields']
 
+[[resources-auth-refresh]]
+=== 토큰 갱신
+
+operation::api/public/auth/refresh[snippets='http-request,http-response,response-headers,response-fields']
+
+[[resources-auth-refresh-error-expired]]
+
+==== 토큰 만료
+
+operation::api/public/auth/refresh/error/expired[snippets='http-request,http-response,response-headers,response-fields']

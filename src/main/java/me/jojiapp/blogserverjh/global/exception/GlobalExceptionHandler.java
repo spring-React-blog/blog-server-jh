@@ -1,5 +1,6 @@
 package me.jojiapp.blogserverjh.global.exception;
 
+import io.jsonwebtoken.*;
 import lombok.*;
 import lombok.extern.slf4j.*;
 import me.jojiapp.blogserverjh.global.exception.convertor.*;
@@ -49,6 +50,13 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(RuntimeException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	private APIResponse<Void> badRequestException(RuntimeException e) {
+		log.error("message", e);
+		return APIResponse.error(e.getMessage());
+	}
+
+	@ExceptionHandler(JwtException.class)
+	@ResponseStatus(HttpStatus.GONE)
+	private APIResponse<Void> jwtException(JwtException e) {
 		log.error("message", e);
 		return APIResponse.error(e.getMessage());
 	}
