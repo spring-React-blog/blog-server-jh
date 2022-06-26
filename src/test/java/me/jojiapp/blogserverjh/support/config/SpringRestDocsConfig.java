@@ -13,8 +13,8 @@ public class SpringRestDocsConfig {
 	public RestDocsMockMvcConfigurationCustomizer restDocsMockMvcConfigurationCustomizer() {
 		return (it) -> {
 			it.operationPreprocessors()
-					.withRequestDefaults(prettyPrint())
-					.withResponseDefaults(prettyPrint());
+				.withRequestDefaults(prettyPrint())
+				.withResponseDefaults(prettyPrint());
 		};
 	}
 }

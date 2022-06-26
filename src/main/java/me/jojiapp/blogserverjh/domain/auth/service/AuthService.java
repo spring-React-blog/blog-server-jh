@@ -1,7 +1,6 @@
 package me.jojiapp.blogserverjh.domain.auth.service;
 
 import lombok.*;
-import me.jojiapp.blogserverjh.domain.auth.dto.request.*;
 import me.jojiapp.blogserverjh.domain.member.exception.*;
 import me.jojiapp.blogserverjh.domain.member.repo.*;
 import me.jojiapp.blogserverjh.domain.member.vo.*;
@@ -23,16 +22,16 @@ public class AuthService {
 	private final JWTProvider jwtProvider;
 	private final MemberRepo memberRepo;
 
-	public JWTResponse login(final Email email,  final Password password) {
+	public JWTResponse login(final Email email, final Password password) {
 		val authenticate = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(email.getEmail(), password.getPassword())
+			new UsernamePasswordAuthenticationToken(email.getEmail(), password.getPassword())
 		);
 		val roles = authenticate.getAuthorities()
-				.stream()
-				.map(grantedAuthority -> grantedAuthority
-						.getAuthority()
-						.replaceAll(MemberContext.ROLE, ""))
-				.toList();
+			.stream()
+			.map(grantedAuthority -> grantedAuthority
+				.getAuthority()
+				.replaceAll(MemberContext.ROLE, ""))
+			.toList();
 
 		return jwtProvider.generate((String) authenticate.getPrincipal(), roles);
 	}
@@ -41,7 +40,7 @@ public class AuthService {
 		jwtProvider.validationRefreshToken(refreshToken);
 		String email = jwtProvider.getIssuer(refreshToken);
 		val loginAuth = memberRepo.findLoginAuthByEmail(Email.from(email))
-				.orElseThrow(MemberNotFoundException::new);
+			.orElseThrow(MemberNotFoundException::new);
 		return jwtProvider.generate(email, List.of(loginAuth.roleType().name()));
 	}
 }

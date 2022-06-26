@@ -31,9 +31,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class AuthAPITest extends APITest {
 
+	public static final String REFRESH_TOKEN = "refreshToken";
 	private static final String BASE_DOCUMENT = "api/public/auth";
 	private static final String BASE_API = "/" + BASE_DOCUMENT;
-	public static final String REFRESH_TOKEN = "refreshToken";
 	@MockBean
 	private AuthService authService;
 	@Autowired
@@ -50,42 +50,42 @@ class AuthAPITest extends APITest {
 		void test1() throws Exception {
 			// Given
 			val memberLogin = new MemberLogin(
-					EMAIL,
-					PASSWORD
+				EMAIL,
+				PASSWORD
 			);
 			val jwtResponse = jwtProvider.generate(EMAIL, List.of(RoleType.USER.name()));
 			given(authService.login(Email.from(EMAIL), Password.from(PASSWORD))).willReturn(jwtResponse);
 
 			// When
 			mockMvc.perform(post(LOGIN_API)
-							.contentType(APPLICATION_JSON)
-							.content(objectMapper.writeValueAsString(memberLogin)))
-					// Then
-					.andExpect(status().isOk())
-					.andExpect(jsonPath("$.body.accessToken").value(jwtResponse.accessToken()))
-					.andExpect(cookie().value("refreshToken", jwtResponse.refreshToken()))
-					// Document
-					.andDo(
-							document(
-									LOGIN_DOCUMENT,
-									requestHeaders(
-											headerWithName(CONTENT_TYPE).description(APPLICATION_JSON)
-									),
+					.contentType(APPLICATION_JSON)
+					.content(objectMapper.writeValueAsString(memberLogin)))
+				// Then
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.body.accessToken").value(jwtResponse.accessToken()))
+				.andExpect(cookie().value("refreshToken", jwtResponse.refreshToken()))
+				// Document
+				.andDo(
+					document(
+						LOGIN_DOCUMENT,
+						requestHeaders(
+							headerWithName(CONTENT_TYPE).description(APPLICATION_JSON)
+						),
 
-									requestFields(
-											fieldWithPath("email").description("이메일").type(STRING),
-											fieldWithPath("password").description("비밀번호").type(STRING)
-									),
-									responseHeaders(
-											headerWithName(CONTENT_TYPE).description(APPLICATION_JSON),
-											headerWithName(SET_COOKIE).description("리프래쉬 토큰")
-									),
-									responseFields(
-											fieldWithPath("message").description("메세지").type(STRING),
-											fieldWithPath("body.accessToken").description("액세스 토큰").type(STRING)
-									)
-							)
-					);
+						requestFields(
+							fieldWithPath("email").description("이메일").type(STRING),
+							fieldWithPath("password").description("비밀번호").type(STRING)
+						),
+						responseHeaders(
+							headerWithName(CONTENT_TYPE).description(APPLICATION_JSON),
+							headerWithName(SET_COOKIE).description("리프래쉬 토큰")
+						),
+						responseFields(
+							fieldWithPath("message").description("메세지").type(STRING),
+							fieldWithPath("body.accessToken").description("액세스 토큰").type(STRING)
+						)
+					)
+				);
 		}
 
 		@Test
@@ -93,32 +93,32 @@ class AuthAPITest extends APITest {
 		void loginBindingError() throws Exception {
 			// Given
 			val memberLogin = new MemberLogin(
-					" ",
-					" "
+				" ",
+				" "
 			);
 
 			// When
 			val document = LOGIN_DOCUMENT + "/error/binding";
 			mockMvc.perform(post(LOGIN_API)
-							.contentType(APPLICATION_JSON)
-							.content(objectMapper.writeValueAsString(memberLogin)))
-					// Then
-					.andExpect(status().isBadRequest())
-					.andExpect(jsonPath("$.body").value(IsNull.nullValue()))
-					.andExpect(jsonPath("$.message").isString())
-					// Document
-					.andDo(
-							document(
-									document,
-									responseHeaders(
-											headerWithName(CONTENT_TYPE).description(APPLICATION_JSON)
-									),
-									responseFields(
-											fieldWithPath("message").description("메세지").type(STRING),
-											fieldWithPath("body").description("데이터").type(NULL)
-									)
-							)
-					);
+					.contentType(APPLICATION_JSON)
+					.content(objectMapper.writeValueAsString(memberLogin)))
+				// Then
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.body").value(IsNull.nullValue()))
+				.andExpect(jsonPath("$.message").isString())
+				// Document
+				.andDo(
+					document(
+						document,
+						responseHeaders(
+							headerWithName(CONTENT_TYPE).description(APPLICATION_JSON)
+						),
+						responseFields(
+							fieldWithPath("message").description("메세지").type(STRING),
+							fieldWithPath("body").description("데이터").type(NULL)
+						)
+					)
+				);
 		}
 
 		@Test
@@ -126,8 +126,8 @@ class AuthAPITest extends APITest {
 		void loginPasswordNotMatchException() throws Exception {
 			// Given
 			val memberLogin = new MemberLogin(
-					EMAIL,
-					PASSWORD
+				EMAIL,
+				PASSWORD
 			);
 			val exception = new PasswordNotMatchException();
 			given(authService.login(Email.from(EMAIL), Password.from(PASSWORD))).willThrow(exception);
@@ -135,25 +135,25 @@ class AuthAPITest extends APITest {
 			// When
 			val document = LOGIN_DOCUMENT + "/error/password-not-match";
 			mockMvc.perform(post(LOGIN_API)
-							.contentType(APPLICATION_JSON)
-							.content(objectMapper.writeValueAsString(memberLogin)))
-					// Then
-					.andExpect(status().isBadRequest())
-					.andExpect(jsonPath("$.body").value(IsNull.nullValue()))
-					.andExpect(jsonPath("$.message").value(exception.getMessage()))
-					// Document
-					.andDo(
-							document(
-									document,
-									responseHeaders(
-											headerWithName(CONTENT_TYPE).description(APPLICATION_JSON)
-									),
-									responseFields(
-											fieldWithPath("message").description("메세지").type(STRING),
-											fieldWithPath("body").description("데이터").type(NULL)
-									)
-							)
-					);
+					.contentType(APPLICATION_JSON)
+					.content(objectMapper.writeValueAsString(memberLogin)))
+				// Then
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.body").value(IsNull.nullValue()))
+				.andExpect(jsonPath("$.message").value(exception.getMessage()))
+				// Document
+				.andDo(
+					document(
+						document,
+						responseHeaders(
+							headerWithName(CONTENT_TYPE).description(APPLICATION_JSON)
+						),
+						responseFields(
+							fieldWithPath("message").description("메세지").type(STRING),
+							fieldWithPath("body").description("데이터").type(NULL)
+						)
+					)
+				);
 		}
 
 		@Test
@@ -161,8 +161,8 @@ class AuthAPITest extends APITest {
 		void loginMemberNotFoundException() throws Exception {
 			// Given
 			val memberLogin = new MemberLogin(
-					EMAIL,
-					PASSWORD
+				EMAIL,
+				PASSWORD
 			);
 			val exception = new MemberNotFoundException();
 			given(authService.login(Email.from(EMAIL), Password.from(PASSWORD))).willThrow(exception);
@@ -170,25 +170,25 @@ class AuthAPITest extends APITest {
 			// When
 			val document = LOGIN_DOCUMENT + "/error/member-not-found";
 			mockMvc.perform(post(LOGIN_API)
-							.contentType(APPLICATION_JSON)
-							.content(objectMapper.writeValueAsString(memberLogin)))
-					// Then
-					.andExpect(status().isBadRequest())
-					.andExpect(jsonPath("$.body").value(IsNull.nullValue()))
-					.andExpect(jsonPath("$.message").value(exception.getMessage()))
-					// Document
-					.andDo(
-							document(
-									document,
-									responseHeaders(
-											headerWithName(CONTENT_TYPE).description(APPLICATION_JSON)
-									),
-									responseFields(
-											fieldWithPath("message").description("메세지").type(STRING),
-											fieldWithPath("body").description("데이터").type(NULL)
-									)
-							)
-					);
+					.contentType(APPLICATION_JSON)
+					.content(objectMapper.writeValueAsString(memberLogin)))
+				// Then
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.body").value(IsNull.nullValue()))
+				.andExpect(jsonPath("$.message").value(exception.getMessage()))
+				// Document
+				.andDo(
+					document(
+						document,
+						responseHeaders(
+							headerWithName(CONTENT_TYPE).description(APPLICATION_JSON)
+						),
+						responseFields(
+							fieldWithPath("message").description("메세지").type(STRING),
+							fieldWithPath("body").description("데이터").type(NULL)
+						)
+					)
+				);
 		}
 	}
 
@@ -209,25 +209,25 @@ class AuthAPITest extends APITest {
 
 			// When
 			mockMvc.perform(post(REFRESH_API)
-							.cookie(cookie))
-					// Then
-					.andExpect(status().isOk())
-					.andExpect(jsonPath("$.body.accessToken").value(jwtResponse.accessToken()))
-					.andExpect(cookie().value(REFRESH_TOKEN, jwtResponse.refreshToken()))
-					// Document
-					.andDo(
-							document(
-									REFRESH_DOCUMENT,
-									responseHeaders(
-											headerWithName(CONTENT_TYPE).description(APPLICATION_JSON),
-											headerWithName(SET_COOKIE).description("리프래쉬 토큰")
-									),
-									responseFields(
-											fieldWithPath("message").description("메세지").type(STRING),
-											fieldWithPath("body.accessToken").description("액세스 토큰").type(STRING)
-									)
-							)
-					);
+					.cookie(cookie))
+				// Then
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.body.accessToken").value(jwtResponse.accessToken()))
+				.andExpect(cookie().value(REFRESH_TOKEN, jwtResponse.refreshToken()))
+				// Document
+				.andDo(
+					document(
+						REFRESH_DOCUMENT,
+						responseHeaders(
+							headerWithName(CONTENT_TYPE).description(APPLICATION_JSON),
+							headerWithName(SET_COOKIE).description("리프래쉬 토큰")
+						),
+						responseFields(
+							fieldWithPath("message").description("메세지").type(STRING),
+							fieldWithPath("body.accessToken").description("액세스 토큰").type(STRING)
+						)
+					)
+				);
 		}
 
 		@Test
@@ -243,24 +243,24 @@ class AuthAPITest extends APITest {
 			// When
 			val document = REFRESH_DOCUMENT + "/error/expired";
 			mockMvc.perform(post(REFRESH_API)
-							.cookie(cookie))
-					// Then
-					.andExpect(status().isGone())
-					.andExpect(jsonPath("$.body").value(IsNull.nullValue()))
-					.andExpect(jsonPath("$.message").value(exception.getMessage()))
-					// Document
-					.andDo(
-							document(
-									document,
-									responseHeaders(
-											headerWithName(CONTENT_TYPE).description(APPLICATION_JSON)
-									),
-									responseFields(
-											fieldWithPath("body").description("데이터").type(NULL),
-											fieldWithPath("message").description("메세지").type(STRING)
-									)
-							)
-					);
+					.cookie(cookie))
+				// Then
+				.andExpect(status().isGone())
+				.andExpect(jsonPath("$.body").value(IsNull.nullValue()))
+				.andExpect(jsonPath("$.message").value(exception.getMessage()))
+				// Document
+				.andDo(
+					document(
+						document,
+						responseHeaders(
+							headerWithName(CONTENT_TYPE).description(APPLICATION_JSON)
+						),
+						responseFields(
+							fieldWithPath("body").description("데이터").type(NULL),
+							fieldWithPath("message").description("메세지").type(STRING)
+						)
+					)
+				);
 		}
 	}
 

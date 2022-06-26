@@ -13,8 +13,8 @@ public final class MemberContext extends User {
 
 	private MemberContext(final LoginAuth loginAuth) {
 		super(loginAuth.email().getEmail(),
-				loginAuth.password().getPassword(),
-				parseAuthorities(loginAuth.roleType()));
+			loginAuth.password().getPassword(),
+			parseAuthorities(loginAuth.roleType()));
 	}
 
 	public static MemberContext from(final LoginAuth loginAuth) {
@@ -35,8 +35,8 @@ public final class MemberContext extends User {
 
 	public static List<? extends GrantedAuthority> parseAuthorities(final List<String> roles) {
 		return roles.stream()
-				.map(MemberContext::getAuthority)
-				.toList();
+			.map(MemberContext::getAuthority)
+			.toList();
 	}
 
 }

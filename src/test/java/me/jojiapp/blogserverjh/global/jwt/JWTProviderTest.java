@@ -24,9 +24,9 @@ public class JWTProviderTest {
 
 	private void setJwtProvider(Long accessTokenExpiredMinutes, Long refreshTokenExpiredMinutes) {
 		val jwtProperties = new JWTProperties(
-				SECRET_KEY,
-				accessTokenExpiredMinutes,
-				refreshTokenExpiredMinutes
+			SECRET_KEY,
+			accessTokenExpiredMinutes,
+			refreshTokenExpiredMinutes
 		);
 
 		this.jwtProvider = new JWTProvider(jwtProperties);
@@ -86,8 +86,8 @@ public class JWTProviderTest {
 
 		// When & Then
 		assertThatThrownBy(() -> jwtProvider.getIssuer(jwtResponse.accessToken()))
-				.isInstanceOf(ExpiredJwtException.class)
-				.hasMessage(EXPIRED.getMessage());
+			.isInstanceOf(ExpiredJwtException.class)
+			.hasMessage(EXPIRED.getMessage());
 	}
 
 	@Test
@@ -111,8 +111,8 @@ public class JWTProviderTest {
 
 		// When & Then
 		assertThatThrownBy(() -> jwtProvider.getIssuer(token))
-				.isInstanceOf(JwtException.class)
-				.hasMessage(BAD_TOKEN.getMessage());
+			.isInstanceOf(JwtException.class)
+			.hasMessage(BAD_TOKEN.getMessage());
 	}
 
 	@Test
@@ -134,8 +134,8 @@ public class JWTProviderTest {
 
 		// When & Then
 		assertThatThrownBy(() -> jwtProvider.validationRefreshToken(jwtResponse.accessToken()))
-				.isInstanceOf(JwtException.class)
-				.hasMessage(NOT_REFRESH_TOKEN.getMessage());
+			.isInstanceOf(JwtException.class)
+			.hasMessage(NOT_REFRESH_TOKEN.getMessage());
 	}
 
 	@Nested
@@ -165,8 +165,8 @@ public class JWTProviderTest {
 
 			// When & Then
 			assertThatThrownBy(() -> jwtProvider.match(jwtResponse.accessToken(), jwtResponse.refreshToken()))
-					.isInstanceOf(JwtException.class)
-					.hasMessage(ACCESS_TOKEN_NOT_EXPIRED.getMessage());
+				.isInstanceOf(JwtException.class)
+				.hasMessage(ACCESS_TOKEN_NOT_EXPIRED.getMessage());
 		}
 
 		@Test
@@ -178,10 +178,10 @@ public class JWTProviderTest {
 
 			// When & Then
 			assertThatThrownBy(() ->
-					jwtProvider.match(jwtResponse.refreshToken(), jwtResponse.refreshToken())
+				jwtProvider.match(jwtResponse.refreshToken(), jwtResponse.refreshToken())
 			)
-					.isInstanceOf(JwtException.class)
-					.hasMessage(NOT_ACCESS_TOKEN.getMessage());
+				.isInstanceOf(JwtException.class)
+				.hasMessage(NOT_ACCESS_TOKEN.getMessage());
 		}
 
 		@Test
@@ -193,10 +193,10 @@ public class JWTProviderTest {
 
 			// When & Then
 			assertThatThrownBy(() ->
-					jwtProvider.match(jwtResponse.accessToken(), jwtResponse.accessToken())
+				jwtProvider.match(jwtResponse.accessToken(), jwtResponse.accessToken())
 			)
-					.isInstanceOf(JwtException.class)
-					.hasMessage(NOT_REFRESH_TOKEN.getMessage());
+				.isInstanceOf(JwtException.class)
+				.hasMessage(NOT_REFRESH_TOKEN.getMessage());
 		}
 	}
 }

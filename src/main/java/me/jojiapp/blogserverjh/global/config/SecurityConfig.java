@@ -43,32 +43,32 @@ public class SecurityConfig {
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {
 		return web -> web.ignoring()
-				.antMatchers("/favicon.ico", DOCS);
+			.antMatchers("/favicon.ico", DOCS);
 	}
 
 	@Bean
 	public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
 		return http
-				.formLogin()
-				.disable()
-				.csrf()
-				.disable()
-				.cors()
-				.configurationSource(corsConfigurationSource)
-				.and()
-				.sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-				.and()
-				.headers()
-				.frameOptions()
-				.disable()
-				.and()
-				.authorizeRequests(authz -> {
-					authz.antMatchers(API_PUBLIC)
-							.permitAll()
-							.anyRequest().authenticated();
-				})
-				.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
-				.build();
+			.formLogin()
+			.disable()
+			.csrf()
+			.disable()
+			.cors()
+			.configurationSource(corsConfigurationSource)
+			.and()
+			.sessionManagement()
+			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			.and()
+			.headers()
+			.frameOptions()
+			.disable()
+			.and()
+			.authorizeRequests(authz -> {
+				authz.antMatchers(API_PUBLIC)
+					.permitAll()
+					.anyRequest().authenticated();
+			})
+			.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
+			.build();
 	}
 }

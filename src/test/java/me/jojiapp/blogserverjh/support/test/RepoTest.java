@@ -10,14 +10,14 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @DataJpaTest(
-		includeFilters = @ComponentScan.Filter(
-				type = FilterType.ASSIGNABLE_TYPE,
-				classes = {
-						JPAQueryDSLConfig.class,
-						JPAAuditingConfig.class,
-						TestAuditorAware.class
-				}
-		)
+	includeFilters = @ComponentScan.Filter(
+		type = FilterType.ASSIGNABLE_TYPE,
+		classes = {
+			JPAQueryDSLConfig.class,
+			JPAAuditingConfig.class,
+			TestAuditorAware.class
+		}
+	)
 )
 @TestEnv
 public @interface RepoTest {

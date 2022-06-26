@@ -18,9 +18,9 @@ public class MemberContextTest {
 		val email = "email";
 		val password = "encoding password";
 		val accessTokenResponse = new LoginAuth(
-				Email.from(email),
-				Password.from(password),
-				RoleType.USER
+			Email.from(email),
+			Password.from(password),
+			RoleType.USER
 		);
 		// When
 		val memberContext = MemberContext.from(accessTokenResponse);
@@ -29,7 +29,7 @@ public class MemberContextTest {
 		assertThat(memberContext.getUsername()).isEqualTo(email);
 		assertThat(memberContext.getPassword()).isEqualTo(password);
 		assertThat(memberContext.getAuthorities())
-				.contains(new SimpleGrantedAuthority(ROLE_USER));
+			.contains(new SimpleGrantedAuthority(ROLE_USER));
 	}
 
 	@Test
@@ -53,7 +53,7 @@ public class MemberContextTest {
 
 		// Then
 		assertThat(authorities.get(0).getAuthority())
-				.isEqualTo("ROLE_%s".formatted(roles.get(0)));
+			.isEqualTo("ROLE_%s".formatted(roles.get(0)));
 	}
 
 }

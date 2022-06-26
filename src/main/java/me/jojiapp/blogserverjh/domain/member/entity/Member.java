@@ -37,13 +37,13 @@ public class Member extends BaseEntity {
 
 	@Builder
 	private Member(
-			final Long id,
-			final String email,
-			final String password,
-			final String name,
-			final String nickname,
-			final LocalDateTime birth,
-			final RoleType role
+		final Long id,
+		final String email,
+		final String password,
+		final String name,
+		final String nickname,
+		final LocalDateTime birth,
+		final RoleType role
 	) {
 		this.id = id;
 		this.email = Email.from(email);

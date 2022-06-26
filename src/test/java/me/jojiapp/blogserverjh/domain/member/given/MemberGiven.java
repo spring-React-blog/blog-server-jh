@@ -18,13 +18,13 @@ public class MemberGiven {
 
 	public static Member givenMember() {
 		return Member.builder()
-				.id(null)
-				.email(EMAIL)
-				.password(ENCODED_PASSWORD)
-				.name(NAME)
-				.nickname(NICKNAME)
-				.birth(BIRTH)
-				.role(RoleType.USER)
-				.build();
+			.id(null)
+			.email(EMAIL)
+			.password(ENCODED_PASSWORD)
+			.name(NAME)
+			.nickname(NICKNAME)
+			.birth(BIRTH)
+			.role(RoleType.USER)
+			.build();
 	}
 }

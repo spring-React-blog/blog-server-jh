@@ -22,17 +22,17 @@ public class JWTProvider {
 	public JWTResponse generate(final String issuer, final List<String> roles) {
 		val now = new Date();
 		val accessToken = Jwts.builder()
-				.setIssuer(issuer)
-				.claim(AUTHORITIES_KEY, String.join(delimiter, roles))
-				.setExpiration(jwtProperties.getAccessTokenExpiredDate(now))
-				.signWith(jwtProperties.getKey())
-				.compact();
+			.setIssuer(issuer)
+			.claim(AUTHORITIES_KEY, String.join(delimiter, roles))
+			.setExpiration(jwtProperties.getAccessTokenExpiredDate(now))
+			.signWith(jwtProperties.getKey())
+			.compact();
 
 		val refreshToken = Jwts.builder()
-				.setIssuer(issuer)
-				.setExpiration(jwtProperties.getRefreshTokenExpiredDate(now))
-				.signWith(jwtProperties.getKey())
-				.compact();
+			.setIssuer(issuer)
+			.setExpiration(jwtProperties.getRefreshTokenExpiredDate(now))
+			.signWith(jwtProperties.getKey())
+			.compact();
 
 		return new JWTResponse(accessToken, refreshToken);
 	}
@@ -44,10 +44,10 @@ public class JWTProvider {
 	private Claims getClaims(final String token) {
 		try {
 			return Jwts.parserBuilder()
-					.setSigningKey(jwtProperties.getKey())
-					.build()
-					.parseClaimsJws(token)
-					.getBody();
+				.setSigningKey(jwtProperties.getKey())
+				.build()
+				.parseClaimsJws(token)
+				.getBody();
 		} catch (ExpiredJwtException e) {
 			throw new ExpiredJwtException(e.getHeader(), e.getClaims(), EXPIRED.getMessage(), e);
 		} catch (JwtException e) {

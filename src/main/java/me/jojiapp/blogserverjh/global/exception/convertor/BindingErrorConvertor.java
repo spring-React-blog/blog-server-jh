@@ -15,18 +15,18 @@ public class BindingErrorConvertor {
 
 	public String getBindingError(final FieldError fieldError) {
 		return Arrays.stream(Objects.requireNonNull(fieldError.getCodes()))
-				.map(code -> createBindErrorOrNull(fieldError, code))
-				.filter(Objects::nonNull)
-				.findFirst() // 찾은 첫 번째 요소 반환
-				.orElse(getErrorMessage(fieldError, fieldError.getDefaultMessage()));
+			.map(code -> createBindErrorOrNull(fieldError, code))
+			.filter(Objects::nonNull)
+			.findFirst() // 찾은 첫 번째 요소 반환
+			.orElse(getErrorMessage(fieldError, fieldError.getDefaultMessage()));
 	}
 
 	private String createBindErrorOrNull(final FieldError fieldError, final String code) {
 		try {
 			val errorMessage = messageSource.getMessage(
-					code,
-					fieldError.getArguments(),
-					LocaleContextHolder.getLocale()
+				code,
+				fieldError.getArguments(),
+				LocaleContextHolder.getLocale()
 			);
 			return getErrorMessage(fieldError, errorMessage);
 		} catch (NoSuchMessageException e) {

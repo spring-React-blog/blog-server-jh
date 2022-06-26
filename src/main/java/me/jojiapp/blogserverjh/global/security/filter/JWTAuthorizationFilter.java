@@ -37,7 +37,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 		val accessToken = authorization.substring(BEARER.length());
 		try {
 			val authenticate = authenticationManager
-					.authenticate(JWTAccessTokenAuthenticationToken.from(accessToken));
+				.authenticate(JWTAccessTokenAuthenticationToken.from(accessToken));
 			SecurityContextHolder.getContext().setAuthentication(authenticate);
 		} catch (AuthenticationException e) {
 			log.error("message", e);
@@ -51,7 +51,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
 	private boolean isNotAuthorizationStartWithBearer(final String authorization) {
 		return Optional.ofNullable(authorization)
-				.map(a -> !a.startsWith(BEARER))
-				.orElse(true);
+			.map(a -> !a.startsWith(BEARER))
+			.orElse(true);
 	}
 }

@@ -18,17 +18,17 @@ public class MemberRepoImpl implements MemberCustomRepo {
 	@Override
 	public Optional<LoginAuth> findLoginAuthByEmail(final Email email) {
 		return Optional.ofNullable(
-				queryFactory.select(
-								Projections.constructor(
-										LoginAuth.class,
-										member.email,
-										member.password,
-										member.role
-								)
-						)
-						.from(member)
-						.where(member.email.eq(email))
-						.fetchOne()
+			queryFactory.select(
+					Projections.constructor(
+						LoginAuth.class,
+						member.email,
+						member.password,
+						member.role
+					)
+				)
+				.from(member)
+				.where(member.email.eq(email))
+				.fetchOne()
 		);
 	}
 }

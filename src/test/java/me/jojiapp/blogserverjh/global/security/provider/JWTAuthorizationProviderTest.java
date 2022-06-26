@@ -20,14 +20,14 @@ public class JWTAuthorizationProviderTest {
 
 	private static final String EMAIL = "test@gmail.com";
 	private static final List<GrantedAuthority> authorities =
-			List.of(new SimpleGrantedAuthority("ROLE_%s".formatted(RoleType.USER)));
+		List.of(new SimpleGrantedAuthority("ROLE_%s".formatted(RoleType.USER)));
 
 	private static final List<String> authoritiesString = authorities.stream()
-			.map(grantedAuthority ->
-					grantedAuthority.getAuthority()
-							.substring("ROLE_".length())
-			)
-			.toList();
+		.map(grantedAuthority ->
+			grantedAuthority.getAuthority()
+				.substring("ROLE_".length())
+		)
+		.toList();
 	private JWTProvider jwtProvider;
 	private JWTAuthorizationProvider jwtAuthorizationProvider;
 
@@ -43,9 +43,9 @@ public class JWTAuthorizationProviderTest {
 
 	private void setJwtProvider(Long accessTokenExpiredMinutes, Long refreshTokenExpiredMinutes) {
 		val jwtProperties = new JWTProperties(
-				SECRET_KEY,
-				accessTokenExpiredMinutes,
-				refreshTokenExpiredMinutes
+			SECRET_KEY,
+			accessTokenExpiredMinutes,
+			refreshTokenExpiredMinutes
 		);
 
 		this.jwtProvider = new JWTProvider(jwtProperties);
@@ -88,8 +88,8 @@ public class JWTAuthorizationProviderTest {
 
 		// When & Then
 		assertThatThrownBy(() -> jwtAuthorizationProvider.authenticate(authentication))
-				.isInstanceOf(JWTAuthenticationException.class)
-				.hasMessage(JWTError.NOT_ACCESS_TOKEN.getMessage());
+			.isInstanceOf(JWTAuthenticationException.class)
+			.hasMessage(JWTError.NOT_ACCESS_TOKEN.getMessage());
 	}
 
 	@Test
@@ -102,8 +102,8 @@ public class JWTAuthorizationProviderTest {
 
 		// When & Then
 		assertThatThrownBy(() -> jwtAuthorizationProvider.authenticate(authentication))
-				.isInstanceOf(JWTAuthenticationException.class)
-				.hasMessage(JWTError.EXPIRED.getMessage());
+			.isInstanceOf(JWTAuthenticationException.class)
+			.hasMessage(JWTError.EXPIRED.getMessage());
 	}
 
 }

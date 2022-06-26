@@ -19,7 +19,7 @@ public class MemberDetailsService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
 		return memberRepo.findLoginAuthByEmail(Email.from(email))
-				.map(MemberContext::from)
-				.orElseThrow(MemberNotFoundException::new);
+			.map(MemberContext::from)
+			.orElseThrow(MemberNotFoundException::new);
 	}
 }

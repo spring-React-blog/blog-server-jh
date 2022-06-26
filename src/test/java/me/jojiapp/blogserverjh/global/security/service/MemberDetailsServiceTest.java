@@ -8,7 +8,6 @@ import me.jojiapp.blogserverjh.global.security.context.*;
 import me.jojiapp.blogserverjh.support.test.*;
 import org.junit.jupiter.api.*;
 import org.mockito.*;
-import org.springframework.security.core.userdetails.*;
 
 import java.util.*;
 
@@ -30,7 +29,7 @@ class MemberDetailsServiceTest {
 	void test1() throws Exception {
 		// When & Then
 		assertThatThrownBy(() -> memberDetailsService.loadUserByUsername("not@gmail.com"))
-				.isInstanceOf(MemberNotFoundException.class);
+			.isInstanceOf(MemberNotFoundException.class);
 	}
 
 	@Test
@@ -38,12 +37,12 @@ class MemberDetailsServiceTest {
 	void test2() throws Exception {
 		// Given
 		val loginAuth = new LoginAuth(
-				Email.from(EMAIL),
-				Password.from(PASSWORD),
-				RoleType.USER
+			Email.from(EMAIL),
+			Password.from(PASSWORD),
+			RoleType.USER
 		);
 		given(memberRepo.findLoginAuthByEmail(Email.from(EMAIL)))
-				.willReturn(Optional.of(loginAuth));
+			.willReturn(Optional.of(loginAuth));
 
 		// When
 		val userDetails = memberDetailsService.loadUserByUsername(EMAIL);

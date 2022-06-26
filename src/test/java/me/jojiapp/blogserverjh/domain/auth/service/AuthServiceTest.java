@@ -34,9 +34,9 @@ class AuthServiceTest {
 	@BeforeEach
 	private void setUp() {
 		val jwtProperties = new JWTProperties(
-				SECRET_KEY,
-				1L,
-				2L
+			SECRET_KEY,
+			1L,
+			2L
 		);
 
 		this.jwtProvider = new JWTProvider(jwtProperties);
@@ -90,8 +90,8 @@ class AuthServiceTest {
 
 			// When & Then
 			assertThatThrownBy(() -> authService.refresh(jwtResponse.accessToken()))
-					.isInstanceOf(JwtException.class)
-					.hasMessage(NOT_REFRESH_TOKEN.getMessage());
+				.isInstanceOf(JwtException.class)
+				.hasMessage(NOT_REFRESH_TOKEN.getMessage());
 		}
 
 	}

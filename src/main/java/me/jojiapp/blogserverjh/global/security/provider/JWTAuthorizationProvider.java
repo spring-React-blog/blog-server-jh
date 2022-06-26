@@ -32,9 +32,9 @@ public class JWTAuthorizationProvider implements AuthenticationProvider {
 
 	private Authentication createAuthenticationByAccessToken(final String accessToken) {
 		return new UsernamePasswordAuthenticationToken(
-				jwtProvider.getIssuer(accessToken),
-				null,
-				MemberContext.parseAuthorities(jwtProvider.getRoles(accessToken))
+			jwtProvider.getIssuer(accessToken),
+			null,
+			MemberContext.parseAuthorities(jwtProvider.getRoles(accessToken))
 		);
 	}
 

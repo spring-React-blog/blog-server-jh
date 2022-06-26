@@ -34,9 +34,9 @@ public class GlobalExceptionHandler {
 	private APIResponse<Void> bindingError(BindException e) {
 		log.error("message", e);
 		return APIResponse.error(
-				e.getFieldErrors().stream()
-						.map(bindingErrorConvertor::getBindingError)
-						.collect(Collectors.joining(", "))
+			e.getFieldErrors().stream()
+				.map(bindingErrorConvertor::getBindingError)
+				.collect(Collectors.joining(", "))
 		);
 	}
 

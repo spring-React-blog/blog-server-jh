@@ -26,15 +26,15 @@ public class MockMVCConfig {
 	@Bean
 	public MockMvc mockMvc() {
 		return MockMvcBuilders.webAppContextSetup(context)
-				.apply(
-						documentationConfiguration(documentationContextProvider)
-								.operationPreprocessors()
-								.withRequestDefaults(prettyPrint())
-								.withResponseDefaults(prettyPrint())
-				)
-				.apply(springSecurity())
-				.addFilters(new CharacterEncodingFilter("UTF-8", true))
-				.alwaysDo(print())
-				.build();
+			.apply(
+				documentationConfiguration(documentationContextProvider)
+					.operationPreprocessors()
+					.withRequestDefaults(prettyPrint())
+					.withResponseDefaults(prettyPrint())
+			)
+			.apply(springSecurity())
+			.addFilters(new CharacterEncodingFilter("UTF-8", true))
+			.alwaysDo(print())
+			.build();
 	}
 }

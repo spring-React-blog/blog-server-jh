@@ -1,7 +1,6 @@
 package me.jojiapp.blogserverjh.global.security.provider;
 
 import lombok.*;
-import lombok.extern.slf4j.*;
 import me.jojiapp.blogserverjh.global.security.exception.*;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.*;

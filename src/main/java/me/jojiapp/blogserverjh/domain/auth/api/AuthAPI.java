@@ -22,8 +22,8 @@ public class AuthAPI {
 
 	@PostMapping("/login")
 	private APIResponse<AccessTokenResponse> login(
-			@RequestBody @Valid final MemberLogin memberLogin,
-			final HttpServletResponse response
+		@RequestBody @Valid final MemberLogin memberLogin,
+		final HttpServletResponse response
 	) {
 		val jwtResponse = authService.login(Email.from(memberLogin.email()), Password.from(memberLogin.password()));
 		response.addCookie(cookieProvider.createRefreshToken(jwtResponse.refreshToken()));
@@ -32,8 +32,8 @@ public class AuthAPI {
 
 	@PostMapping("/refresh")
 	private APIResponse<AccessTokenResponse> refresh(
-			@CookieValue(name = "refreshToken") final String refreshToken,
-			final HttpServletResponse response
+		@CookieValue(name = "refreshToken") final String refreshToken,
+		final HttpServletResponse response
 	) {
 		val jwtResponse = authService.refresh(refreshToken);
 		response.addCookie(cookieProvider.createRefreshToken(jwtResponse.refreshToken()));

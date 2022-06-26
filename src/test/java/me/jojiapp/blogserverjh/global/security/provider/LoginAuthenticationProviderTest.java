@@ -1,7 +1,6 @@
 package me.jojiapp.blogserverjh.global.security.provider;
 
 import lombok.*;
-import me.jojiapp.blogserverjh.domain.member.vo.*;
 import me.jojiapp.blogserverjh.global.security.exception.*;
 import me.jojiapp.blogserverjh.support.test.*;
 import org.junit.jupiter.api.*;
@@ -46,7 +45,7 @@ class LoginAuthenticationProviderTest {
 		val authenticationToken = new UsernamePasswordAuthenticationToken(EMAIL, PASSWORD);
 		given(passwordEncoder.matches(PASSWORD, ENCODED_PASSWORD)).willReturn(true);
 		given(userDetailsService.loadUserByUsername(EMAIL))
-				.willReturn(givenMemberContext());
+			.willReturn(givenMemberContext());
 
 		// When
 		Authentication authenticate = loginAuthenticationProvider.authenticate(authenticationToken);
@@ -64,10 +63,10 @@ class LoginAuthenticationProviderTest {
 		val authenticationToken = new UsernamePasswordAuthenticationToken(EMAIL, "rawPassword");
 		given(passwordEncoder.matches("rawPassword", ENCODED_PASSWORD)).willReturn(false);
 		given(userDetailsService.loadUserByUsername(EMAIL))
-				.willReturn(givenMemberContext());
+			.willReturn(givenMemberContext());
 
 		// When & Then
 		assertThatThrownBy(() -> loginAuthenticationProvider.authenticate(authenticationToken))
-				.isInstanceOf(PasswordNotMatchException.class);
+			.isInstanceOf(PasswordNotMatchException.class);
 	}
 }
