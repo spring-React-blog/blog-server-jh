@@ -24,6 +24,7 @@ ext {
     set('snippetsDir', file('build/generated-snippets'))
     set('documentDir', file('src/main/resources/static/docs'))
     set('bootJarDocumentPath', 'static/docs')
+    set('documentMarkdownDir', file('docs'))
 }
 
 dependencies {
@@ -95,6 +96,15 @@ task copyDocument(type: Copy) {
     into documentDir
 }
 
-build {
+task copyDocumentMarkdown(type: Copy) {
     dependsOn copyDocument
+    from file("${documentDir}")
+    into documentMarkdownDir
+    rename { String fileName ->
+        fileName.replace("html", "md")
+    }
+}
+
+build {
+    dependsOn copyDocumentMarkdown
 }

@@ -1,12 +1,12 @@
-	|===
-		|필드명|설명|타입|양식|필수값
+|===
+|필드명|설명|타입|양식|필수값
 
-	{{#fields}}
-		|{{#tableCellContent}}{{path}}{{/tableCellContent}}
-		|{{#tableCellContent}}{{description}}{{/tableCellContent}}
-		|{{#tableCellContent}}{{type}}{{/tableCellContent}}
-		|{{#tableCellContent}}{{#formats}}{{formats}}{{/formats}}{{/tableCellContent}}
-		|{{#tableCellContent}}{{^optional}}true{{/optional}}{{/tableCellContent}}
-	{{/fields}}
+{{#fields}}
+|{{#tableCellContent}}{{path}}{{/tableCellContent}}
+|{{#tableCellContent}}{{description}}{{/tableCellContent}}
+|{{#tableCellContent}}{{type}}{{/tableCellContent}}
+|{{#tableCellContent}}{{#formats}}{{formats}}{{/formats}}{{/tableCellContent}}
+|{{#tableCellContent}}{{^optional}}true{{/optional}}{{/tableCellContent}}
+{{/fields}}
 
-		|===
+|===
