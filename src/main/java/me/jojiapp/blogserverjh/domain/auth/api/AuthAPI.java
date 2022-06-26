@@ -4,8 +4,7 @@ import lombok.*;
 import me.jojiapp.blogserverjh.domain.auth.dto.request.*;
 import me.jojiapp.blogserverjh.domain.auth.dto.response.*;
 import me.jojiapp.blogserverjh.domain.auth.service.*;
-import me.jojiapp.blogserverjh.global.jwt.*;
-import me.jojiapp.blogserverjh.global.jwt.dto.response.*;
+import me.jojiapp.blogserverjh.global.cookie.*;
 import me.jojiapp.blogserverjh.global.response.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,9 +16,8 @@ import javax.validation.*;
 @RequiredArgsConstructor
 public class AuthAPI {
 
-	private static final String REFRESH_TOKEN = "refreshToken";
 	private final AuthService authService;
-	private final JWTProperties jwtProperties;
+	private final CookieProvider cookieProvider;
 
 	@PostMapping("/login")
 	private APIResponse<AccessTokenResponse> login(
@@ -27,15 +25,8 @@ public class AuthAPI {
 			final HttpServletResponse response
 	) {
 		val jwtResponse = authService.login(memberLogin);
-		response.addCookie(createRefreshTokenCookie(jwtResponse.refreshToken()));
+		response.addCookie(cookieProvider.createRefreshToken(jwtResponse.refreshToken()));
 		return APIResponse.success(new AccessTokenResponse(jwtResponse.accessToken()));
-	}
-
-	private Cookie createRefreshTokenCookie(final String refreshToken) {
-		val cookie = new Cookie(REFRESH_TOKEN, refreshToken);
-		cookie.setMaxAge(jwtProperties.getRefreshTokenExpiredSeconds());
-		cookie.setDomain("localhost:8080");
-		return cookie;
 	}
 
 	@PostMapping("/refresh")
@@ -44,7 +35,7 @@ public class AuthAPI {
 			final HttpServletResponse response
 	) {
 		val jwtResponse = authService.refresh(refreshToken);
-		response.addCookie(createRefreshTokenCookie(jwtResponse.refreshToken()));
+		response.addCookie(cookieProvider.createRefreshToken(jwtResponse.refreshToken()));
 		return APIResponse.success(new AccessTokenResponse(jwtResponse.accessToken()));
 	}
 }

@@ -243,7 +243,7 @@ class AuthAPITest extends APITest {
 			// When
 			val document = REFRESH_DOCUMENT + "/error/expired";
 			mockMvc.perform(post(REFRESH_API)
-							.cookie(cookie, cookie))
+							.cookie(cookie))
 					// Then
 					.andExpect(status().isGone())
 					.andExpect(jsonPath("$.body").value(IsNull.nullValue()))
