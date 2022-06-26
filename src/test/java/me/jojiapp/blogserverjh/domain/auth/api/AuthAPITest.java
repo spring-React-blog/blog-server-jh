@@ -54,7 +54,7 @@ class AuthAPITest extends APITest {
 					PASSWORD
 			);
 			val jwtResponse = jwtProvider.generate(EMAIL, List.of(RoleType.USER.name()));
-			given(authService.login(memberLogin)).willReturn(jwtResponse);
+			given(authService.login(Email.from(EMAIL), Password.from(PASSWORD))).willReturn(jwtResponse);
 
 			// When
 			mockMvc.perform(post(LOGIN_API)
@@ -130,7 +130,7 @@ class AuthAPITest extends APITest {
 					PASSWORD
 			);
 			val exception = new PasswordNotMatchException();
-			given(authService.login(memberLogin)).willThrow(exception);
+			given(authService.login(Email.from(EMAIL), Password.from(PASSWORD))).willThrow(exception);
 
 			// When
 			val document = LOGIN_DOCUMENT + "/error/password-not-match";
@@ -165,7 +165,7 @@ class AuthAPITest extends APITest {
 					PASSWORD
 			);
 			val exception = new MemberNotFoundException();
-			given(authService.login(memberLogin)).willThrow(exception);
+			given(authService.login(Email.from(EMAIL), Password.from(PASSWORD))).willThrow(exception);
 
 			// When
 			val document = LOGIN_DOCUMENT + "/error/member-not-found";

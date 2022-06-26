@@ -2,7 +2,6 @@ package me.jojiapp.blogserverjh.domain.auth.service;
 
 import io.jsonwebtoken.*;
 import lombok.*;
-import me.jojiapp.blogserverjh.domain.auth.dto.request.*;
 import me.jojiapp.blogserverjh.domain.member.repo.*;
 import me.jojiapp.blogserverjh.domain.member.vo.*;
 import me.jojiapp.blogserverjh.global.jwt.*;
@@ -48,16 +47,12 @@ class AuthServiceTest {
 	@DisplayName("이메일과 비밀번호를 통해 로그인에 성공하면 AccessToken과 RefreshToken을 반환한다")
 	void login() throws Exception {
 		// Given
-		val memberLogin = new MemberLogin(
-				EMAIL,
-				PASSWORD
-		);
 		val authenticationToken = new UsernamePasswordAuthenticationToken(EMAIL, PASSWORD);
 		val authenticate = new UsernamePasswordAuthenticationToken(EMAIL, null, MemberContext.parseAuthorities(RoleType.USER));
 		given(authenticationManager.authenticate(authenticationToken)).willReturn(authenticate);
 
 		// When
-		val actual = authService.login(memberLogin);
+		val actual = authService.login(Email.from(EMAIL), Password.from(PASSWORD));
 
 		// Then
 		assertThat(jwtProvider.getIssuer(actual.accessToken())).isEqualTo(EMAIL);

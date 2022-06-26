@@ -23,9 +23,9 @@ public class AuthService {
 	private final JWTProvider jwtProvider;
 	private final MemberRepo memberRepo;
 
-	public JWTResponse login(final MemberLogin memberLogin) {
+	public JWTResponse login(final Email email,  final Password password) {
 		val authenticate = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(memberLogin.email(), memberLogin.password())
+				new UsernamePasswordAuthenticationToken(email.getEmail(), password.getPassword())
 		);
 		val roles = authenticate.getAuthorities()
 				.stream()
