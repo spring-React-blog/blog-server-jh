@@ -35,20 +35,15 @@ public class Member extends BaseEntity {
 	@Column(nullable = false)
 	private RoleType role;
 
-
-	private Member(final Long id) {
-		this.id = id;
-	}
-
 	@Builder
 	private Member(
-			final Long id,
-			final String email,
-			final String password,
-			final String name,
-			final String nickname,
-			final LocalDateTime birth,
-			final RoleType role
+		final Long id,
+		final String email,
+		final String password,
+		final String name,
+		final String nickname,
+		final LocalDateTime birth,
+		final RoleType role
 	) {
 		this.id = id;
 		this.email = Email.from(email);

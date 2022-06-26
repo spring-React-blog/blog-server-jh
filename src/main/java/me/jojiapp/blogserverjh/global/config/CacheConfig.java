@@ -20,22 +20,22 @@ public class CacheConfig {
 	@Bean
 	public ObjectMapper objectMapper() {
 		return new ObjectMapper()
-				.findAndRegisterModules()
-				.enable(SerializationFeature.INDENT_OUTPUT)
-				.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-				.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-				.registerModule(new JavaTimeModule());
+			.findAndRegisterModules()
+			.enable(SerializationFeature.INDENT_OUTPUT)
+			.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+			.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+			.registerModule(new JavaTimeModule());
 	}
 
 	@Bean
 	public CacheManager cacheManager() {
 		RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
-				.serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
-				.serializeValuesWith(RedisSerializationContext.
-						SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer(objectMapper())))
-				.entryTtl(Duration.ofSeconds(30));
+			.serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
+			.serializeValuesWith(RedisSerializationContext.
+				SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer(objectMapper())))
+			.entryTtl(Duration.ofSeconds(30));
 
 		return RedisCacheManager.RedisCacheManagerBuilder.fromConnectionFactory(redisConnectionFactory)
-				.cacheDefaults(redisCacheConfiguration).build();
+			.cacheDefaults(redisCacheConfiguration).build();
 	}
 }

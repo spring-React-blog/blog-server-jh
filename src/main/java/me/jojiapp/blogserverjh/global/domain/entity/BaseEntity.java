@@ -2,6 +2,7 @@ package me.jojiapp.blogserverjh.global.domain.entity;
 
 import lombok.*;
 import org.springframework.data.annotation.*;
+import org.springframework.data.jpa.domain.support.*;
 
 import javax.persistence.*;
 import java.time.*;
@@ -9,6 +10,7 @@ import java.time.*;
 @MappedSuperclass
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity {
 
 	@CreatedBy

@@ -9,19 +9,16 @@ import java.util.*;
 
 public final class MemberContext extends User {
 
-	private static final String ROLE = "ROLE_";
+	public static final String ROLE = "ROLE_";
 
-	private final Long id;
-
-	private MemberContext(final MemberLogin memberLogin) {
-		super(memberLogin.email().getEmail(),
-				memberLogin.password().getPassword(),
-				parseAuthorities(memberLogin.roleType()));
-		this.id = memberLogin.id();
+	private MemberContext(final LoginAuth loginAuth) {
+		super(loginAuth.email().getEmail(),
+			loginAuth.password().getPassword(),
+			parseAuthorities(loginAuth.roleType()));
 	}
 
-	public static MemberContext from(final MemberLogin memberLogin) {
-		return new MemberContext(memberLogin);
+	public static MemberContext from(final LoginAuth loginAuth) {
+		return new MemberContext(loginAuth);
 	}
 
 	public static List<GrantedAuthority> parseAuthorities(final RoleType roleType) {
@@ -32,17 +29,14 @@ public final class MemberContext extends User {
 		return new SimpleGrantedAuthority(ROLE + roleType);
 	}
 
-	private static SimpleGrantedAuthority getAuthority(String role) {
+	public static SimpleGrantedAuthority getAuthority(String role) {
 		return new SimpleGrantedAuthority(ROLE + role);
 	}
 
 	public static List<? extends GrantedAuthority> parseAuthorities(final List<String> roles) {
 		return roles.stream()
-				.map(MemberContext::getAuthority)
-				.toList();
+			.map(MemberContext::getAuthority)
+			.toList();
 	}
 
-	public Long getId() {
-		return id;
-	}
 }

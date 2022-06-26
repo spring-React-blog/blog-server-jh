@@ -1,8 +1,8 @@
 package me.jojiapp.blogserverjh.global.response;
 
 public record APIResponse<T>(
-		T body,
-		String message
+	T body,
+	String message
 ) {
 
 	public static APIResponse<SuccessResponse> success() {

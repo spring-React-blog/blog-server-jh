@@ -24,7 +24,6 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 	public static final String BEARER = "Bearer ";
 	public static final String UTF_8 = "UTF-8";
 	private final AuthenticationManager authenticationManager;
-
 	private final ObjectMapper objectMapper;
 
 	@Override
@@ -37,8 +36,8 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
 		val accessToken = authorization.substring(BEARER.length());
 		try {
-			Authentication authenticate = authenticationManager
-					.authenticate(JWTAccessTokenAuthentication.of(accessToken));
+			val authenticate = authenticationManager
+				.authenticate(JWTAccessTokenAuthenticationToken.from(accessToken));
 			SecurityContextHolder.getContext().setAuthentication(authenticate);
 		} catch (AuthenticationException e) {
 			log.error("message", e);
@@ -52,7 +51,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
 	private boolean isNotAuthorizationStartWithBearer(final String authorization) {
 		return Optional.ofNullable(authorization)
-				.map(a -> !a.startsWith(BEARER))
-				.orElse(true);
+			.map(a -> !a.startsWith(BEARER))
+			.orElse(true);
 	}
 }

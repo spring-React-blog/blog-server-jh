@@ -3,6 +3,7 @@ package me.jojiapp.blogserverjh.global.security.provider;
 import lombok.*;
 import me.jojiapp.blogserverjh.domain.member.vo.*;
 import me.jojiapp.blogserverjh.global.jwt.*;
+import me.jojiapp.blogserverjh.global.jwt.dto.response.*;
 import me.jojiapp.blogserverjh.global.jwt.error.*;
 import me.jojiapp.blogserverjh.global.security.authentication.*;
 import me.jojiapp.blogserverjh.global.security.exception.*;
@@ -17,17 +18,16 @@ import static org.assertj.core.api.Assertions.*;
 
 public class JWTAuthorizationProviderTest {
 
+	private static final String EMAIL = "test@gmail.com";
 	private static final List<GrantedAuthority> authorities =
-			List.of(new SimpleGrantedAuthority("ROLE_%s".formatted(RoleType.USER)));
+		List.of(new SimpleGrantedAuthority("ROLE_%s".formatted(RoleType.USER)));
 
 	private static final List<String> authoritiesString = authorities.stream()
-			.map(grantedAuthority ->
-					grantedAuthority.getAuthority()
-							.substring("ROLE_".length())
-			)
-			.toList();
-	public static final long ID = 1L;
-
+		.map(grantedAuthority ->
+			grantedAuthority.getAuthority()
+				.substring("ROLE_".length())
+		)
+		.toList();
 	private JWTProvider jwtProvider;
 	private JWTAuthorizationProvider jwtAuthorizationProvider;
 
@@ -43,9 +43,9 @@ public class JWTAuthorizationProviderTest {
 
 	private void setJwtProvider(Long accessTokenExpiredMinutes, Long refreshTokenExpiredMinutes) {
 		val jwtProperties = new JWTProperties(
-				SECRET_KEY,
-				accessTokenExpiredMinutes,
-				refreshTokenExpiredMinutes
+			SECRET_KEY,
+			accessTokenExpiredMinutes,
+			refreshTokenExpiredMinutes
 		);
 
 		this.jwtProvider = new JWTProvider(jwtProperties);
@@ -55,7 +55,7 @@ public class JWTAuthorizationProviderTest {
 	@Test
 	@DisplayName("JWTAccessTokenAuthentication 클래스를 지원한다")
 	void support() throws Exception {
-		val actual = jwtAuthorizationProvider.supports(JWTAccessTokenAuthentication.class);
+		val actual = jwtAuthorizationProvider.supports(JWTAccessTokenAuthenticationToken.class);
 		assertThat(actual).isTrue();
 	}
 
@@ -63,29 +63,33 @@ public class JWTAuthorizationProviderTest {
 	@DisplayName("Access Token을 기반으로 Authentication 객체를 생성하여 반환한다")
 	void authenticate() throws Exception {
 		// Given
-		val jwtDto = jwtProvider.generate(1L, authoritiesString);
-		val authentication = JWTAccessTokenAuthentication.of(jwtDto.accessToken());
+		val jwtResponse = getJWTResponse();
+		val authentication = JWTAccessTokenAuthenticationToken.from(jwtResponse.accessToken());
 
 		// When
 		Authentication actual = jwtAuthorizationProvider.authenticate(authentication);
 
 		// Then
-		assertThat(actual.getPrincipal()).isEqualTo(ID);
+		assertThat(actual.getPrincipal()).isEqualTo(EMAIL);
 		assertThat(actual.getCredentials()).isNull();
 		assertThat(actual.getAuthorities()).isEqualTo(authorities);
+	}
+
+	private JWTResponse getJWTResponse() {
+		return jwtProvider.generate(EMAIL, authoritiesString);
 	}
 
 	@Test
 	@DisplayName("Access Token이 아닐 경우 JWTAuthenticationException이 발생한다")
 	void isAccessToken() throws Exception {
 		// Given
-		val jwtDto = jwtProvider.generate(1L, authoritiesString);
-		val authentication = JWTAccessTokenAuthentication.of(jwtDto.refreshToken());
+		val jwtResponse = getJWTResponse();
+		val authentication = JWTAccessTokenAuthenticationToken.from(jwtResponse.refreshToken());
 
 		// When & Then
 		assertThatThrownBy(() -> jwtAuthorizationProvider.authenticate(authentication))
-				.isInstanceOf(JWTAuthenticationException.class)
-				.hasMessage(JWTError.NOT_ACCESS_TOKEN.getMessage());
+			.isInstanceOf(JWTAuthenticationException.class)
+			.hasMessage(JWTError.NOT_ACCESS_TOKEN.getMessage());
 	}
 
 	@Test
@@ -93,13 +97,13 @@ public class JWTAuthorizationProviderTest {
 	void expiredAccessToken() throws Exception {
 		// Given
 		setJwtProvider(-1L, 2L);
-		val jwtDto = jwtProvider.generate(1L, authoritiesString);
-		val authentication = JWTAccessTokenAuthentication.of(jwtDto.accessToken());
+		val jwtResponse = getJWTResponse();
+		val authentication = JWTAccessTokenAuthenticationToken.from(jwtResponse.accessToken());
 
 		// When & Then
 		assertThatThrownBy(() -> jwtAuthorizationProvider.authenticate(authentication))
-				.isInstanceOf(JWTAuthenticationException.class)
-				.hasMessage(JWTError.EXPIRED.getMessage());
+			.isInstanceOf(JWTAuthenticationException.class)
+			.hasMessage(JWTError.EXPIRED.getMessage());
 	}
 
 }

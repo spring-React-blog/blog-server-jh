@@ -1,7 +1,7 @@
 plugins {
     id 'org.springframework.boot' version '2.7.0'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id 'org.asciidoctor.convert' version '1.5.8'
+    id 'org.asciidoctor.jvm.convert' version '3.3.2'
     id 'java'
 }
 
@@ -13,6 +13,7 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+    asciidoctorExtensions
 }
 
 repositories {
@@ -20,7 +21,10 @@ repositories {
 }
 
 ext {
-    set('snippetsDir', file("build/generated-snippets"))
+    set('snippetsDir', file('build/generated-snippets'))
+    set('documentDir', file('src/main/resources/static/docs'))
+    set('bootJarDocumentPath', 'static/docs')
+    set('documentMarkdownDir', file('docs'))
 }
 
 dependencies {
@@ -52,17 +56,55 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
 
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    // Rest Docs
+    asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
 }
 
-tasks.named('test') {
+clean {
+    delete documentDir
+}
+
+test {
     outputs.dir snippetsDir
     useJUnitPlatform()
 }
 
-tasks.named('asciidoctor') {
+asciidoctor {
+    doFirst {
+        delete documentDir
+    }
+
+    configurations('asciidoctorExtensions')
     inputs.dir snippetsDir
     dependsOn test
+}
+
+bootJar {
+    dependsOn asciidoctor
+    from("${asciidoctor.outputDir}") {
+        into bootJarDocumentPath
+    }
+}
+
+task copyDocument(type: Copy) {
+    dependsOn asciidoctor
+    from file("${asciidoctor.outputDir}")
+    into documentDir
+}
+
+task copyDocumentMarkdown(type: Copy) {
+    dependsOn copyDocument
+    from file("${documentDir}")
+    into documentMarkdownDir
+    rename { String fileName ->
+        fileName.replace("html", "md")
+    }
+}
+
+build {
+    dependsOn copyDocumentMarkdown
 }

@@ -36,6 +36,10 @@ public class JWTProperties {
 		return getExpiredDate(now, refreshTokenExpiredMinutes);
 	}
 
+	public int getRefreshTokenExpiredSeconds() {
+		return (int) Duration.ofMinutes(refreshTokenExpiredMinutes).toSeconds();
+	}
+
 	private Date getExpiredDate(final Date now, final Long expiredMinutes) {
 		return new Date(now.getTime() + Duration.ofMinutes(expiredMinutes).toMillis());
 	}
